@@ -1,0 +1,404 @@
+/* =========================================================
+   BDE BAKER — feuille de style commune
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:ital,wght@0,400;0,500;0,700;1,500;1,700&family=Gaseok+One&display=swap');
+
+:root {
+  /* Couleurs de marque */
+  --purple: #8a5ca0;
+  --blue: #8fc9e8;
+  --navy: #00005a;
+  --white: #ffffff;
+  --lime: #d7e456;
+  --pink: #ff8bae;
+  --orange: #ff9c5a;
+  --green: #9fc260;
+
+  /* Typographies */
+  --font-display: 'Gaseok One', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--navy);
+  background:
+    linear-gradient(#fff, #fff),
+    repeating-linear-gradient(0deg, rgba(138, 92, 160, 0.15) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(138, 92, 160, 0.15) 0 1px, transparent 1px 28px);
+}
+
+a {
+  color: var(--purple);
+  font-weight: 700;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Accessibilité : focus clavier visible partout */
+a:focus-visible,
+button:focus-visible,
+.tab:focus-visible {
+  outline: 3px solid var(--purple);
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   Navigation
+   ========================================================= */
+
+.site-header {
+  padding: 1.5rem 0 0;
+}
+
+.nav-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.brand img {
+  height: 48px;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--purple);
+  transform: rotate(-2deg);
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.tab {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 14px;
+  border-radius: 2px 2px 0 0;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+}
+
+.tab.blue    { background: var(--blue);   color: var(--navy);  transform: rotate(-2deg); }
+.tab.pink    { background: var(--pink);   color: var(--white); transform: rotate(2deg); }
+.tab.lime    { background: var(--lime);   color: #4a5a10;      transform: rotate(-1deg); }
+.tab.orange  { background: var(--orange); color: #4a2c0a;      transform: rotate(2deg); }
+.tab.purple  { background: var(--purple); color: var(--white); transform: rotate(0deg); }
+
+.tab-group { position: relative; }
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--white);
+  border: 1px solid #eee;
+  min-width: 220px;
+  z-index: 20;
+  box-shadow: 3px 5px 0 rgba(138, 92, 160, 0.25);
+}
+
+.tab-group:hover .submenu,
+.tab-group:focus-within .submenu {
+  display: block;
+}
+
+.submenu a {
+  display: block;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--navy);
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.submenu a:last-child { border-bottom: none; }
+.submenu a:hover { background: #faf8fb; }
+
+.nav-divider {
+  width: 100%;
+  height: 2px;
+  background: var(--purple);
+  margin-top: 12px;
+}
+
+/* Menu burger (mobile) */
+.burger-btn {
+  width: 32px;
+  height: 32px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--purple);
+  border-radius: 2px;
+  transform: rotate(-3deg);
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--white);
+  z-index: 100;
+  padding: 1.2rem 1rem;
+}
+
+.mobile-menu.open { display: block; }
+
+.mobile-menu-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--purple);
+  border-radius: 2px;
+  color: var(--white);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  margin-left: auto;
+}
+
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 2rem;
+}
+
+.mobile-menu-links a {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 16px;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+@media (max-width: 760px) {
+  .nav-tabs { display: none; }
+  .burger-btn { display: flex; }
+}
+
+/* =========================================================
+   Titres de section
+   ========================================================= */
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--purple);
+  line-height: 1;
+  display: inline-block;
+  transform: rotate(-2deg);
+  margin-top: 2rem;
+}
+
+.page-subtitle {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--navy);
+  margin-top: 8px;
+  max-width: 560px;
+}
+
+/* =========================================================
+   Fiches / cartes façon post-it
+   ========================================================= */
+
+.card {
+  background: var(--white);
+  border: 1px solid #eee;
+  padding: 14px;
+  border-radius: 2px;
+  position: relative;
+}
+
+.tape {
+  position: absolute;
+  top: -9px;
+  width: 36px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.card-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--purple);
+}
+
+.card-text {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--navy);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* =========================================================
+   Bandeau collage (Accueil)
+   ========================================================= */
+
+.collage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 20px;
+  margin-top: 2rem;
+}
+
+.collage-tile {
+  background: var(--white);
+  border: 1px solid #eee;
+  padding: 10px 10px 28px;
+  text-decoration: none;
+  display: block;
+}
+
+.collage-photo {
+  height: 90px;
+  border-radius: 2px;
+}
+
+.collage-label {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--navy);
+  margin-top: 8px;
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+
+.site-footer {
+  margin-top: 4rem;
+  padding: 2.5rem 0 2rem;
+}
+
+.footer-grid {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.footer-col {
+  flex: 1;
+  min-width: 150px;
+}
+
+.footer-col h3 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--purple);
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.footer-links {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--navy);
+  margin-top: 10px;
+  line-height: 2;
+}
+
+.footer-links a {
+  display: block;
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.social-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.social-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.footer-rule {
+  width: 100%;
+  height: 1px;
+  background: #e5e0ea;
+  margin-top: 2rem;
+}
+
+.footer-legal {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--navy);
+  opacity: 0.5;
+  margin-top: 14px;
+}
+
+/* =========================================================
+   Utilitaires
+   ========================================================= */
+
+.rotate-n2 { transform: rotate(-2deg); }
+.rotate-2  { transform: rotate(2deg); }
+.rotate-n1 { transform: rotate(-1deg); }
+.rotate-1  { transform: rotate(1deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

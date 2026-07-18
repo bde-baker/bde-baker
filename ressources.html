@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDE Baker — Ressources</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Ressources garde le fond blanc uni, sans la grille quadrillée, en contraste volontaire */
+    body.ressources-page {
+      background: #fff;
+    }
+    .res-section {
+      padding: 26px 4px 12px;
+      border-bottom: 1px solid #e5e0ea;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+    .res-section:last-child { border-bottom: none; }
+    .res-text { flex: 1; min-width: 260px; }
+    .res-photo {
+      width: 150px;
+      height: 110px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .res-label {
+      display: inline-block;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 5px 12px;
+      border-radius: 2px;
+      position: relative;
+    }
+    .res-label .tape {
+      position: absolute;
+      top: -7px;
+      width: 26px;
+      height: 11px;
+      background: rgba(255,255,255,0.6);
+    }
+    .res-body { font-size: 13px; margin-top: 10px; line-height: 1.7; max-width: 480px; }
+
+    .crous-board { position: relative; height: 360px; margin-top: 16px; }
+    .crous-center {
+      position: absolute;
+      top: 145px; left: 250px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: var(--purple);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 3px 4px 0 rgba(138,92,160,0.3);
+    }
+    .crous-center span { font-weight: 700; font-size: 16px; color: #fff; }
+    .crous-branch {
+      position: absolute;
+      width: 220px;
+      background: #fff;
+      padding: 10px 12px;
+      border-radius: 2px;
+    }
+    .crous-branch .b-title { font-weight: 700; font-size: 12px; letter-spacing: 0.04em; }
+    .crous-branch .b-text { font-size: 11px; margin-top: 5px; line-height: 1.4; }
+
+    @media (max-width: 700px) {
+      .crous-board { height: auto; position: static; display: flex; flex-direction: column; gap: 10px; }
+      .crous-center { position: static; width: 100%; height: 60px; margin: 0; }
+      .crous-branch { position: static !important; width: 100% !important; }
+    }
+  </style>
+</head>
+<body class="ressources-page">
+
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-row">
+        <a href="index.html" class="brand">
+          <img src="images/logo/logo-bde-baker.png" alt="Logo BDE Baker">
+          <span class="brand-name">BDE BAKER</span>
+        </a>
+
+        <nav class="nav-tabs" aria-label="Navigation principale">
+          <a href="index.html" class="tab blue">ACCUEIL</a>
+          <a href="le-club.html" class="tab pink">LE CLUB</a>
+          <div class="tab-group">
+            <span class="tab lime" tabindex="0">NOS MOMENTS ▾</span>
+            <div class="submenu">
+              <a href="nos-moments/sante.html">NOS ACTIONS POUR LA SANTÉ</a>
+              <a href="nos-moments/weekend.html">WEEK-END D'INTÉGRATION</a>
+            </div>
+          </div>
+          <div class="tab-group">
+            <span class="tab orange" tabindex="0">ERASMUS ▾</span>
+            <div class="submenu">
+              <a href="erasmus/destinations.html">DESTINATIONS</a>
+              <a href="erasmus/voyages.html">VOYAGES</a>
+            </div>
+          </div>
+          <a href="ressources.html" class="tab purple">RESSOURCES</a>
+        </nav>
+
+        <button class="burger-btn" id="burgerBtn" aria-label="Ouvrir le menu">☰</button>
+      </div>
+      <div class="nav-divider"></div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Navigation mobile">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Fermer le menu">×</button>
+    <div class="mobile-menu-links">
+      <a href="index.html" style="background:var(--blue); color:var(--navy); transform:rotate(-2deg);">ACCUEIL</a>
+      <a href="le-club.html" style="background:var(--pink); color:var(--white); transform:rotate(2deg);">LE CLUB</a>
+      <a href="nos-moments/sante.html" style="background:var(--lime); color:#4a5a10; transform:rotate(-1deg);">NOS ACTIONS POUR LA SANTÉ</a>
+      <a href="nos-moments/weekend.html" style="background:var(--lime); color:#4a5a10; transform:rotate(1deg);">WEEK-END D'INTÉGRATION</a>
+      <a href="erasmus/destinations.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(-1deg);">DESTINATIONS</a>
+      <a href="erasmus/voyages.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(1deg);">VOYAGES</a>
+      <a href="ressources.html" style="background:var(--purple); color:var(--white); transform:rotate(0deg);">RESSOURCES</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-title" style="transform:rotate(-2deg);">RESSOURCES</div>
+    <div class="page-subtitle">tout ce qu'un ancien étudiant t'aurait dit, avant que t'aies à le demander.</div>
+
+    <div style="width:100%; height:1px; background:#e5e0ea; margin-top:1.6rem;"></div>
+
+    <!-- Logement -->
+    <div class="res-section">
+      <div class="res-text">
+        <span class="res-label" style="background:var(--blue); color:var(--navy); transform:rotate(-2deg);">
+          <span class="tape" style="left:60%; transform:translateX(-50%) rotate(-6deg);"></span>
+          LOGEMENT
+        </span>
+        <div class="res-body">
+          tu cherches un appart ? nos sites préférés pour en trouver un sont
+          <a href="https://www.jinka.fr/" target="_blank">Jinka</a>,
+          <a href="https://www.leboncoin.fr/" target="_blank">Leboncoin</a>,
+          <a href="https://www.seloger.com/" target="_blank">SeLoger</a>,
+          et <a href="https://www.lacartedescolocs.fr/" target="_blank">La Carte des Colocs</a> pour les colocations. n'oublie pas de demander les APL !
+        </div>
+      </div>
+      <div class="res-photo" style="background:var(--blue); transform:rotate(2deg); box-shadow:3px 4px 0 rgba(143,201,232,0.3);"></div>
+    </div>
+
+    <!-- CROUS -->
+    <div class="res-section" style="display:block;">
+      <span class="res-label" style="background:var(--lime); color:#4a5a10; transform:rotate(2deg);">
+        <span class="tape" style="right:15%; transform:rotate(7deg);"></span>
+        CROUS
+      </span>
+
+      <div class="crous-board">
+        <div class="crous-center"><span>CROUS</span></div>
+
+        <div class="crous-branch" style="top:10px; left:15px; border:1px solid var(--blue); border-left:4px solid var(--blue); transform:rotate(-1deg); box-shadow:2px 3px 0 rgba(143,201,232,0.3);">
+          <div class="b-title" style="color:#3d7fa3;">LOGEMENT</div>
+          <div class="b-text">plusieurs logements proposés sur Toulouse. demandes de juin à juillet.</div>
+        </div>
+
+        <div class="crous-branch" style="top:10px; right:5px; border:1px solid var(--pink); border-left:4px solid var(--pink); transform:rotate(1deg); box-shadow:2px 3px 0 rgba(255,139,174,0.3);">
+          <div class="b-title" style="color:#a3345c;">BOURSE</div>
+          <div class="b-text">demandes de mars à mai. exemption de la cotisation CVEC.</div>
+        </div>
+
+        <div class="crous-branch" style="bottom:5px; left:15px; border:1px solid var(--orange); border-left:4px solid var(--orange); transform:rotate(1deg); box-shadow:2px 3px 0 rgba(255,156,90,0.3);">
+          <div class="b-title" style="color:#b0611e;">REPAS</div>
+          <div class="b-text">depuis mai 2026, repas à 1€ ouvert à tous les étudiants. plusieurs points de restauration CROUS à Toulouse.</div>
+        </div>
+
+        <div class="crous-branch" style="bottom:5px; right:5px; border:1px solid var(--green); border-left:4px solid var(--green); transform:rotate(-1deg); box-shadow:2px 3px 0 rgba(159,194,96,0.3);">
+          <div class="b-title" style="color:#4c7a1f;">SANTÉ</div>
+          <div class="b-text">accès à plusieurs services auprès du Service Social Étudiants.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Santé -->
+    <div class="res-section">
+      <div class="res-photo" style="background:var(--pink); transform:rotate(-2deg); box-shadow:3px 4px 0 rgba(255,139,174,0.3);"></div>
+      <div class="res-text">
+        <span class="res-label" style="background:var(--pink); color:#fff; transform:rotate(-2deg);">
+          <span class="tape" style="left:55%; transform:translateX(-50%) rotate(-5deg);"></span>
+          SANTÉ
+        </span>
+        <div class="res-body">
+          le programme <a href="https://santepsy.etudiant.gouv.fr/" target="_blank">Santé Psy Étudiant</a> permet 12 séances de psy gratuites. pour les étudiant.e.s qui ne sont plus sur la mutuelle de leurs parents, la Complémentaire Santé Solidaire est à 1€ par jour et permet le remboursement de plusieurs services de santé.
+        </div>
+      </div>
+    </div>
+
+    <!-- Aides alimentaires -->
+    <div class="res-section" style="display:block;">
+      <span class="res-label" style="background:var(--orange); color:#4a2c0a; transform:rotate(2deg);">
+        <span class="tape" style="right:20%; transform:rotate(6deg);"></span>
+        AIDES ALIMENTAIRES
+      </span>
+      <div class="res-body">
+        <a href="https://linkee.co/distribution-toulouse/" target="_blank">Linkee</a>,
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSenPUK1KTiVWAQVQgIdwvIRqktfAhuaYHB-GUevOYdezlNBWQ/viewform" target="_blank">AGEMP</a>,
+        <a href="https://cop1.fr/ville/toulouse/" target="_blank">COP1</a>...
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <img src="images/logo/logo-bde-baker.png" alt="Logo BDE Baker" style="height:60px; transform:rotate(-3deg);">
+          <div style="font-style:italic; font-size:12px; margin-top:8px; max-width:200px;">la vie de bde baker, page après page.</div>
+        </div>
+
+        <div class="footer-col">
+          <h3>LIENS RAPIDES</h3>
+          <div class="footer-links">
+            <a href="index.html">ACCUEIL</a>
+            <a href="le-club.html">LE CLUB</a>
+            <a href="nos-moments/sante.html">NOS MOMENTS</a>
+            <a href="erasmus/destinations.html">ERASMUS</a>
+            <a href="ressources.html">RESSOURCES</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3>SUIVEZ-NOUS</h3>
+          <div class="social-row">
+            <a href="#" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
+            <a href="#" class="social-icon" style="background:var(--blue); color:var(--navy); transform:rotate(5deg);">IN</a>
+          </div>
+        </div>
+
+        <div class="footer-col" style="flex:1.4;">
+          <h3>UNE QUESTION ?</h3>
+          <div style="font-style:italic; font-size:13px; margin-top:10px; line-height:1.5;">
+            écris-nous, on répond (presque) toujours.<br>
+            <span style="font-weight:700; font-style:normal;">contact@bdebaker.fr</span>
+          </div>
+          <div style="font-size:12px; margin-top:10px; line-height:1.5;">
+            Lycée Polyvalent Joséphine Baker<br>
+            85 avenue Jean Baylet<br>
+            31100 Toulouse
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-rule"></div>
+      <div class="footer-legal">© BUREAU DES ETUDIANTS DE BAKER — SIRET 993 967 611 00019 — mentions légales — crédits</div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDE Baker — Week-End d'intégration</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .programme-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .programme-card {
+      width: 200px;
+    }
+    .section-heading {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--purple);
+      margin-top: 2.5rem;
+      border-bottom: 2px dashed var(--purple);
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+    .souvenirs-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 1rem;
+      grid-auto-rows: 110px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-row">
+        <a href="../index.html" class="brand">
+          <img src="../images/logo/logo-bde-baker.png" alt="Logo BDE Baker">
+          <span class="brand-name">BDE BAKER</span>
+        </a>
+
+        <nav class="nav-tabs" aria-label="Navigation principale">
+          <a href="../index.html" class="tab blue">ACCUEIL</a>
+          <a href="../le-club.html" class="tab pink">LE CLUB</a>
+          <div class="tab-group">
+            <span class="tab lime" tabindex="0">NOS MOMENTS ▾</span>
+            <div class="submenu">
+              <a href="sante.html">NOS ACTIONS POUR LA SANTÉ</a>
+              <a href="weekend.html">WEEK-END D'INTÉGRATION</a>
+            </div>
+          </div>
+          <div class="tab-group">
+            <span class="tab orange" tabindex="0">ERASMUS ▾</span>
+            <div class="submenu">
+              <a href="../erasmus/destinations.html">DESTINATIONS</a>
+              <a href="../erasmus/voyages.html">VOYAGES</a>
+            </div>
+          </div>
+          <a href="../ressources.html" class="tab purple">RESSOURCES</a>
+        </nav>
+
+        <button class="burger-btn" id="burgerBtn" aria-label="Ouvrir le menu">☰</button>
+      </div>
+      <div class="nav-divider"></div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Navigation mobile">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Fermer le menu">×</button>
+    <div class="mobile-menu-links">
+      <a href="../index.html" style="background:var(--blue); color:var(--navy); transform:rotate(-2deg);">ACCUEIL</a>
+      <a href="../le-club.html" style="background:var(--pink); color:var(--white); transform:rotate(2deg);">LE CLUB</a>
+      <a href="sante.html" style="background:var(--lime); color:#4a5a10; transform:rotate(-1deg);">NOS ACTIONS POUR LA SANTÉ</a>
+      <a href="weekend.html" style="background:var(--lime); color:#4a5a10; transform:rotate(1deg);">WEEK-END D'INTÉGRATION</a>
+      <a href="../erasmus/destinations.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(-1deg);">DESTINATIONS</a>
+      <a href="../erasmus/voyages.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(1deg);">VOYAGES</a>
+      <a href="../ressources.html" style="background:var(--purple); color:var(--white); transform:rotate(0deg);">RESSOURCES</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-title">week-end d'intégration</div>
+    <div class="page-subtitle">le gros morceau de l'année — trois jours pour rencontrer toute la promo.</div>
+
+    <div class="section-heading">le programme</div>
+    <div class="programme-row">
+      <div class="card programme-card" style="transform:rotate(-2deg); box-shadow:3px 5px 0 rgba(138,92,160,0.25);">
+        <div class="card-title">vendredi</div>
+        <div class="card-text" style="line-height:1.6;">17h — départ en car<br>20h — installation &amp; apéro<br>22h — soirée jeux</div>
+      </div>
+      <div class="card programme-card" style="transform:rotate(2deg); box-shadow:3px 5px 0 rgba(255,156,90,0.3);">
+        <div class="card-title">samedi</div>
+        <div class="card-text" style="line-height:1.6;">10h — olympiades<br>14h — ateliers découverte<br>21h — grande soirée à thème</div>
+      </div>
+      <div class="card programme-card" style="transform:rotate(-3deg); box-shadow:3px 5px 0 rgba(143,201,232,0.35);">
+        <div class="card-title">dimanche</div>
+        <div class="card-text" style="line-height:1.6;">11h — brunch commun<br>13h — rangement<br>15h — retour</div>
+      </div>
+    </div>
+
+    <div class="section-heading">souvenirs des éditions précédentes</div>
+    <div class="souvenirs-grid">
+      <div style="grid-row:span 2; background:var(--blue); border-radius:2px; transform:rotate(-1deg); box-shadow:3px 5px 0 rgba(143,201,232,0.35);"></div>
+      <div style="background:var(--pink); border-radius:2px; transform:rotate(2deg); box-shadow:3px 5px 0 rgba(255,139,174,0.3);"></div>
+      <div style="background:var(--lime); border-radius:2px; transform:rotate(-1deg); box-shadow:3px 5px 0 rgba(215,228,86,0.35);"></div>
+      <div style="background:var(--orange); border-radius:2px; transform:rotate(1deg); box-shadow:3px 5px 0 rgba(255,156,90,0.3);"></div>
+      <div style="grid-row:span 2; background:var(--purple); border-radius:2px; transform:rotate(2deg); box-shadow:3px 5px 0 rgba(138,92,160,0.25);"></div>
+      <div style="background:var(--green); border-radius:2px; transform:rotate(-2deg); box-shadow:3px 5px 0 rgba(99,153,34,0.25);"></div>
+      <div style="grid-column:span 2; background:var(--pink); border-radius:2px; transform:rotate(1deg); box-shadow:3px 5px 0 rgba(255,139,174,0.3);"></div>
+    </div>
+
+    <div style="position:relative; margin-top:2.2rem; transform:rotate(-1deg); display:inline-block;">
+      <div style="background:var(--lime); color:#4a5a10; font-weight:700; font-size:15px; padding:14px 18px; border-radius:2px; box-shadow:3px 5px 0 rgba(74,90,16,0.25); max-width:520px;">
+        infos pratiques — inscriptions ouvertes jusqu'au 10/09, participation à prix libre selon les moyens. prévoir sac de couchage, bonne humeur, et rien d'autre.
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <img src="../images/logo/logo-bde-baker.png" alt="Logo BDE Baker" style="height:60px; transform:rotate(-3deg);">
+          <div style="font-style:italic; font-size:12px; margin-top:8px; max-width:200px;">la vie de bde baker, page après page.</div>
+        </div>
+
+        <div class="footer-col">
+          <h3>LIENS RAPIDES</h3>
+          <div class="footer-links">
+            <a href="../index.html">ACCUEIL</a>
+            <a href="../le-club.html">LE CLUB</a>
+            <a href="sante.html">NOS MOMENTS</a>
+            <a href="../erasmus/destinations.html">ERASMUS</a>
+            <a href="../ressources.html">RESSOURCES</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3>SUIVEZ-NOUS</h3>
+          <div class="social-row">
+            <a href="#" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
+            <a href="#" class="social-icon" style="background:var(--blue); color:var(--navy); transform:rotate(5deg);">IN</a>
+          </div>
+        </div>
+
+        <div class="footer-col" style="flex:1.4;">
+          <h3>UNE QUESTION ?</h3>
+          <div style="font-style:italic; font-size:13px; margin-top:10px; line-height:1.5;">
+            écris-nous, on répond (presque) toujours.<br>
+            <span style="font-weight:700; font-style:normal;">contact@bdebaker.fr</span>
+          </div>
+          <div style="font-size:12px; margin-top:10px; line-height:1.5;">
+            Lycée Polyvalent Joséphine Baker<br>
+            85 avenue Jean Baylet<br>
+            31100 Toulouse
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-rule"></div>
+      <div class="footer-legal">© BUREAU DES ETUDIANTS DE BAKER — SIRET 993 967 611 00019 — mentions légales — crédits</div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>

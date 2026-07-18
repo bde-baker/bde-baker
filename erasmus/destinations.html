@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDE Baker — Destinations</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .dest-layout {
+      display: flex;
+      gap: 24px;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    #board {
+      flex: 1.3;
+      min-width: 320px;
+      background: #f4f0f7;
+      border: 1px solid #e2d8ea;
+      border-radius: 4px;
+      position: relative;
+      height: 380px;
+      overflow: hidden;
+    }
+    .pin {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      cursor: pointer;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
+      border: none;
+      padding: 0;
+    }
+    .pin:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+    #panel {
+      flex: 1;
+      min-width: 260px;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 16px;
+      box-shadow: 3px 5px 0 rgba(138,92,160,0.2);
+    }
+    #panelTitle {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--purple);
+      text-transform: capitalize;
+    }
+    #panelList {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .company-card {
+      border: 1px solid #eee;
+      border-radius: 2px;
+      padding: 10px;
+      background: #faf8fb;
+    }
+    .company-name { font-weight: 700; font-size: 13px; color: var(--navy); }
+    .company-desc { font-size: 12px; color: var(--navy); margin-top: 4px; line-height: 1.4; }
+
+    /* Version mobile : liste de pays dépliable au lieu du plateau de punaises */
+    .dest-mobile-list { display: none; }
+    @media (max-width: 760px) {
+      .dest-layout { display: none; }
+      .dest-mobile-list { display: flex; flex-direction: column; gap: 10px; margin-top: 1.5rem; }
+      .country-item {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 2px;
+        padding: 12px 14px;
+        cursor: pointer;
+      }
+      .country-item .companies { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
+      .country-item.open .companies { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-row">
+        <a href="../index.html" class="brand">
+          <img src="../images/logo/logo-bde-baker.png" alt="Logo BDE Baker">
+          <span class="brand-name">BDE BAKER</span>
+        </a>
+
+        <nav class="nav-tabs" aria-label="Navigation principale">
+          <a href="../index.html" class="tab blue">ACCUEIL</a>
+          <a href="../le-club.html" class="tab pink">LE CLUB</a>
+          <div class="tab-group">
+            <span class="tab lime" tabindex="0">NOS MOMENTS ▾</span>
+            <div class="submenu">
+              <a href="../nos-moments/sante.html">NOS ACTIONS POUR LA SANTÉ</a>
+              <a href="../nos-moments/weekend.html">WEEK-END D'INTÉGRATION</a>
+            </div>
+          </div>
+          <div class="tab-group">
+            <span class="tab orange" tabindex="0">ERASMUS ▾</span>
+            <div class="submenu">
+              <a href="destinations.html">DESTINATIONS</a>
+              <a href="voyages.html">VOYAGES</a>
+            </div>
+          </div>
+          <a href="../ressources.html" class="tab purple">RESSOURCES</a>
+        </nav>
+
+        <button class="burger-btn" id="burgerBtn" aria-label="Ouvrir le menu">☰</button>
+      </div>
+      <div class="nav-divider"></div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Navigation mobile">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Fermer le menu">×</button>
+    <div class="mobile-menu-links">
+      <a href="../index.html" style="background:var(--blue); color:var(--navy); transform:rotate(-2deg);">ACCUEIL</a>
+      <a href="../le-club.html" style="background:var(--pink); color:var(--white); transform:rotate(2deg);">LE CLUB</a>
+      <a href="../nos-moments/sante.html" style="background:var(--lime); color:#4a5a10; transform:rotate(-1deg);">NOS ACTIONS POUR LA SANTÉ</a>
+      <a href="../nos-moments/weekend.html" style="background:var(--lime); color:#4a5a10; transform:rotate(1deg);">WEEK-END D'INTÉGRATION</a>
+      <a href="destinations.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(-1deg);">DESTINATIONS</a>
+      <a href="voyages.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(1deg);">VOYAGES</a>
+      <a href="../ressources.html" style="background:var(--purple); color:var(--white); transform:rotate(0deg);">RESSOURCES</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-title">destinations</div>
+    <div class="page-subtitle">clique sur une punaise pour découvrir les entreprises partenaires du pays.</div>
+
+    <!-- Desktop : plateau de punaises -->
+    <div class="dest-layout">
+      <div id="board">
+        <button class="pin" data-country="portugal" style="top:150px; left:60px; background:var(--purple);" aria-label="Portugal"></button>
+        <button class="pin" data-country="allemagne" style="top:80px; left:220px; background:var(--pink);" aria-label="Allemagne"></button>
+        <button class="pin" data-country="pologne" style="top:70px; left:290px; background:var(--blue);" aria-label="Pologne"></button>
+        <button class="pin" data-country="italie" style="top:180px; left:250px; background:var(--lime);" aria-label="Italie"></button>
+        <button class="pin" data-country="suede" style="top:30px; left:250px; background:var(--orange);" aria-label="Suède"></button>
+        <button class="pin" data-country="japon" style="top:120px; left:420px; background:var(--green);" aria-label="Japon"></button>
+
+        <div style="position:absolute; top:250px; left:40px; font-weight:700; font-size:11px; color:var(--purple); transform:rotate(-3deg);">europe</div>
+        <div style="position:absolute; top:150px; left:400px; font-weight:700; font-size:11px; color:var(--purple); transform:rotate(2deg);">asie</div>
+      </div>
+
+      <div id="panel">
+        <div id="panelTitle">choisis un pays</div>
+        <div id="panelList"></div>
+      </div>
+    </div>
+
+    <!-- Mobile : liste dépliable -->
+    <div class="dest-mobile-list" id="mobileList"></div>
+
+    <div style="margin-top:2.2rem; transform:rotate(-1deg);">
+      <div style="font-style:italic; font-weight:500; font-size:14px; max-width:480px;">pour plus d'informations sur la mobilité (bourses, informations pratiques ou documents à fournir) :</div>
+      <a href="https://toulouseschoolofdesign.eu/myd.php" target="_blank" style="display:inline-block; margin-top:10px; background:var(--purple); color:#fff; font-weight:700; font-size:14px; padding:12px 18px; border-radius:2px; text-decoration:none; box-shadow:3px 5px 0 rgba(138,92,160,0.3);">Toulouse School of Design and Crafts</a>
+    </div>
+
+    <div style="position:relative; margin-top:2rem; transform:rotate(-1deg); display:inline-block;">
+      <div style="background:var(--lime); color:#4a5a10; font-weight:700; font-size:15px; padding:14px 18px; border-radius:2px; box-shadow:3px 5px 0 rgba(74,90,16,0.25); max-width:480px;">
+        envie de lire de vraies histoires ? direction la partie voyages pour découvrir les témoignages d'étudiants partis en mobilité.
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <img src="../images/logo/logo-bde-baker.png" alt="Logo BDE Baker" style="height:60px; transform:rotate(-3deg);">
+          <div style="font-style:italic; font-size:12px; margin-top:8px; max-width:200px;">la vie de bde baker, page après page.</div>
+        </div>
+
+        <div class="footer-col">
+          <h3>LIENS RAPIDES</h3>
+          <div class="footer-links">
+            <a href="../index.html">ACCUEIL</a>
+            <a href="../le-club.html">LE CLUB</a>
+            <a href="../nos-moments/sante.html">NOS MOMENTS</a>
+            <a href="destinations.html">ERASMUS</a>
+            <a href="../ressources.html">RESSOURCES</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3>SUIVEZ-NOUS</h3>
+          <div class="social-row">
+            <a href="#" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
+            <a href="#" class="social-icon" style="background:var(--blue); color:var(--navy); transform:rotate(5deg);">IN</a>
+          </div>
+        </div>
+
+        <div class="footer-col" style="flex:1.4;">
+          <h3>UNE QUESTION ?</h3>
+          <div style="font-style:italic; font-size:13px; margin-top:10px; line-height:1.5;">
+            écris-nous, on répond (presque) toujours.<br>
+            <span style="font-weight:700; font-style:normal;">contact@bdebaker.fr</span>
+          </div>
+          <div style="font-size:12px; margin-top:10px; line-height:1.5;">
+            Lycée Polyvalent Joséphine Baker<br>
+            85 avenue Jean Baylet<br>
+            31100 Toulouse
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-rule"></div>
+      <div class="footer-legal">© BUREAU DES ETUDIANTS DE BAKER — SIRET 993 967 611 00019 — mentions légales — crédits</div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script>
+    (function () {
+      var data = {
+        portugal: [
+          { name: "Nova Studio", desc: "Agence de design produit, accueille des stagiaires en fin de cursus." },
+          { name: "Lisboa Tech", desc: "Start-up spécialisée en UX pour applications mobiles." }
+        ],
+        allemagne: [
+          { name: "Berlin Werk", desc: "Studio de design graphique et identité visuelle, forte culture typographique." },
+          { name: "MünchenLabs", desc: "Bureau d'innovation produit, collabore avec des écoles de design locales." }
+        ],
+        pologne: [
+          { name: "Kraków Studio", desc: "Agence de branding pour marques indépendantes." }
+        ],
+        italie: [
+          { name: "Milano Design Co.", desc: "Studio historique de design d'objet, propose des stages courts." },
+          { name: "Torino Creative", desc: "Agence pluridisciplinaire, design & communication." }
+        ],
+        suede: [
+          { name: "Stockholm Form", desc: "Studio de design scandinave minimaliste, très sélectif." }
+        ],
+        japon: [
+          { name: "Tokyo Atelier", desc: "Studio de design d'expérience, collabore avec des universités partenaires." },
+          { name: "Kyoto Craft Lab", desc: "Atelier mêlant artisanat traditionnel et design contemporain." }
+        ]
+      };
+
+      var panelTitle = document.getElementById('panelTitle');
+      var panelList = document.getElementById('panelList');
+
+      function renderDesktop(country) {
+        panelTitle.textContent = country;
+        panelList.innerHTML = '';
+        data[country].forEach(function (company) {
+          var card = document.createElement('div');
+          card.className = 'company-card';
+          var name = document.createElement('div');
+          name.className = 'company-name';
+          name.textContent = company.name;
+          var desc = document.createElement('div');
+          desc.className = 'company-desc';
+          desc.textContent = company.desc;
+          card.appendChild(name);
+          card.appendChild(desc);
+          panelList.appendChild(card);
+        });
+      }
+
+      document.querySelectorAll('.pin').forEach(function (pin) {
+        pin.addEventListener('click', function () {
+          renderDesktop(pin.getAttribute('data-country'));
+        });
+      });
+
+      // Version mobile : liste dépliable générée à partir des mêmes données
+      var mobileList = document.getElementById('mobileList');
+      Object.keys(data).forEach(function (country) {
+        var item = document.createElement('div');
+        item.className = 'country-item';
+
+        var header = document.createElement('div');
+        header.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+        var label = document.createElement('div');
+        label.style.cssText = 'font-weight:700; font-size:13px; text-transform:capitalize;';
+        label.textContent = country;
+        var arrow = document.createElement('div');
+        arrow.style.cssText = 'font-size:12px; color:var(--purple);';
+        arrow.textContent = '▾';
+        header.appendChild(label);
+        header.appendChild(arrow);
+
+        var companiesDiv = document.createElement('div');
+        companiesDiv.className = 'companies';
+        data[country].forEach(function (company) {
+          var name = document.createElement('div');
+          name.style.cssText = 'font-weight:700; font-size:12px;';
+          name.textContent = company.name;
+          var desc = document.createElement('div');
+          desc.style.cssText = 'font-size:11px; margin-top:2px; margin-bottom:8px;';
+          desc.textContent = company.desc;
+          companiesDiv.appendChild(name);
+          companiesDiv.appendChild(desc);
+        });
+
+        item.appendChild(header);
+        item.appendChild(companiesDiv);
+        item.addEventListener('click', function () {
+          item.classList.toggle('open');
+          arrow.textContent = item.classList.contains('open') ? '▴' : '▾';
+        });
+        mobileList.appendChild(item);
+      });
+    })();
+  </script>
+</body>
+</html>
