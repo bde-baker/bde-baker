@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDE Baker — Voyages</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .polaroid-row {
+      display: flex;
+      gap: 22px;
+      flex-wrap: wrap;
+      margin-top: 2.2rem;
+    }
+    .polaroid {
+      width: 190px;
+      background: #fff;
+      border: 1px solid #eee;
+      padding: 10px 10px 14px;
+      cursor: pointer;
+      position: relative;
+    }
+    .polaroid-photo { height: 130px; border-radius: 2px; }
+    .stamp {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 30px;
+      height: 30px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .polaroid-name { font-weight: 700; font-size: 14px; margin-top: 8px; }
+    .polaroid-quote { font-style: italic; font-size: 12px; color: var(--purple); margin-top: 4px; }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,90,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    #overlay.open { display: flex; }
+    .overlay-box {
+      background: #fff;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 6px 8px 0 rgba(0,0,90,0.2);
+      position: relative;
+    }
+    .overlay-image {
+      position: relative;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .overlay-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.85);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 2;
+    }
+    #closeBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      transform: none;
+      width: 28px;
+      height: 28px;
+    }
+    #dots {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+    #dots span { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.4); }
+    #dots span.active { background: #fff; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-row">
+        <a href="../index.html" class="brand">
+          <img src="../images/logo/logo-bde-baker.png" alt="Logo BDE Baker">
+          <span class="brand-name">BDE BAKER</span>
+        </a>
+
+        <nav class="nav-tabs" aria-label="Navigation principale">
+          <a href="../index.html" class="tab blue">ACCUEIL</a>
+          <a href="../le-club.html" class="tab pink">LE CLUB</a>
+          <div class="tab-group">
+            <span class="tab lime" tabindex="0">NOS MOMENTS ▾</span>
+            <div class="submenu">
+              <a href="../nos-moments/sante.html">NOS ACTIONS POUR LA SANTÉ</a>
+              <a href="../nos-moments/weekend.html">WEEK-END D'INTÉGRATION</a>
+            </div>
+          </div>
+          <div class="tab-group">
+            <span class="tab orange" tabindex="0">ERASMUS ▾</span>
+            <div class="submenu">
+              <a href="destinations.html">DESTINATIONS</a>
+              <a href="voyages.html">VOYAGES</a>
+            </div>
+          </div>
+          <a href="../ressources.html" class="tab purple">RESSOURCES</a>
+        </nav>
+
+        <button class="burger-btn" id="burgerBtn" aria-label="Ouvrir le menu">☰</button>
+      </div>
+      <div class="nav-divider"></div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Navigation mobile">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Fermer le menu">×</button>
+    <div class="mobile-menu-links">
+      <a href="../index.html" style="background:var(--blue); color:var(--navy); transform:rotate(-2deg);">ACCUEIL</a>
+      <a href="../le-club.html" style="background:var(--pink); color:var(--white); transform:rotate(2deg);">LE CLUB</a>
+      <a href="../nos-moments/sante.html" style="background:var(--lime); color:#4a5a10; transform:rotate(-1deg);">NOS ACTIONS POUR LA SANTÉ</a>
+      <a href="../nos-moments/weekend.html" style="background:var(--lime); color:#4a5a10; transform:rotate(1deg);">WEEK-END D'INTÉGRATION</a>
+      <a href="destinations.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(-1deg);">DESTINATIONS</a>
+      <a href="voyages.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(1deg);">VOYAGES</a>
+      <a href="../ressources.html" style="background:var(--purple); color:var(--white); transform:rotate(0deg);">RESSOURCES</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-title">voyages</div>
+    <div class="page-subtitle">ce que nos étudiants racontent, une fois rentrés. clique sur une fiche pour voir leurs photos et lire l'histoire complète.</div>
+
+    <div class="polaroid-row" id="polaroidRow"></div>
+
+  </main>
+
+  <div id="overlay" role="dialog" aria-modal="true" aria-label="Témoignage complet">
+    <div class="overlay-box">
+      <button class="overlay-btn" id="closeBtn" aria-label="Fermer">×</button>
+      <div class="overlay-image" style="background:#8a5ca0;">
+        <button class="overlay-btn" id="prevBtn" style="left:8px;" aria-label="Photo précédente">‹</button>
+        <div id="overlayColor" style="width:100%; height:100%;"></div>
+        <button class="overlay-btn" id="nextBtn" style="right:8px;" aria-label="Photo suivante">›</button>
+        <div id="dots"></div>
+      </div>
+      <div style="padding:18px;">
+        <div id="overlayTitle" style="font-weight:700; font-size:16px; color:var(--purple);"></div>
+        <div id="overlayText" style="font-size:13px; margin-top:8px; line-height:1.5;"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <img src="../images/logo/logo-bde-baker.png" alt="Logo BDE Baker" style="height:60px; transform:rotate(-3deg);">
+          <div style="font-style:italic; font-size:12px; margin-top:8px; max-width:200px;">la vie de bde baker, page après page.</div>
+        </div>
+
+        <div class="footer-col">
+          <h3>LIENS RAPIDES</h3>
+          <div class="footer-links">
+            <a href="../index.html">ACCUEIL</a>
+            <a href="../le-club.html">LE CLUB</a>
+            <a href="../nos-moments/sante.html">NOS MOMENTS</a>
+            <a href="destinations.html">ERASMUS</a>
+            <a href="../ressources.html">RESSOURCES</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3>SUIVEZ-NOUS</h3>
+          <div class="social-row">
+            <a href="#" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
+            <a href="#" class="social-icon" style="background:var(--blue); color:var(--navy); transform:rotate(5deg);">IN</a>
+          </div>
+        </div>
+
+        <div class="footer-col" style="flex:1.4;">
+          <h3>UNE QUESTION ?</h3>
+          <div style="font-style:italic; font-size:13px; margin-top:10px; line-height:1.5;">
+            écris-nous, on répond (presque) toujours.<br>
+            <span style="font-weight:700; font-style:normal;">contact@bdebaker.fr</span>
+          </div>
+          <div style="font-size:12px; margin-top:10px; line-height:1.5;">
+            Lycée Polyvalent Joséphine Baker<br>
+            85 avenue Jean Baylet<br>
+            31100 Toulouse
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-rule"></div>
+      <div class="footer-legal">© BUREAU DES ETUDIANTS DE BAKER — SIRET 993 967 611 00019 — mentions légales — crédits</div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script>
+    (function () {
+      var stories = [
+        { name: "léa — lisbonne", quote: "« le café y est infect mais les gens adorables. »", stamp: "PT", color: "#8fc9e8", title: "léa — lisbonne", text: "Léa est partie un semestre à Lisbonne en design d'espace. Elle raconte des cours plus pratiques qu'en France, des colocataires devenus des amis pour la vie, et un rythme de vie beaucoup plus lent qu'elle a mis du temps à retrouver au retour.", images: ["#8fc9e8", "#a9d6ee", "#6fb3d8"] },
+        { name: "yanis — berlin", quote: "« j'ai appris plus en 6 mois qu'en 2 ans d'école. »", stamp: "DE", color: "#ff8bae", title: "yanis — berlin", text: "Yanis a fait son stage de fin d'année dans un studio de design graphique berlinois. Il parle d'une culture typographique très exigeante, de longues discussions sur la grille et la structure, et d'une ville qui ne dort jamais vraiment.", images: ["#ff8bae", "#ffa6c3", "#f5709a"] },
+        { name: "chloé — milan", quote: "« mon italien s'est arrêté à \u201cun caffè, per favore\u201d. »", stamp: "IT", color: "#d7e456", title: "chloé — milan", text: "Chloé a passé un semestre à Milan en design d'objet. Elle décrit un enseignement très centré sur l'histoire du design italien, des visites d'ateliers réguliers, et une vie étudiante rythmée par les apéros du soir.", images: ["#d7e456", "#e3ec84", "#c3d43a"] },
+        { name: "nathan — tokyo", quote: "« le silence dans le métro m'a manqué en rentrant. »", stamp: "JP", color: "#9fc260", title: "nathan — tokyo", text: "Nathan est parti un an à Tokyo dans un atelier de design d'expérience. Il raconte un choc culturel fort au début, une rigueur de travail impressionnante, et une ville dont l'énergie particulière lui manque encore aujourd'hui.", images: ["#9fc260", "#b6d484", "#87ad45"] }
+      ];
+
+      var row = document.getElementById('polaroidRow');
+      var rotations = [-4, 3, -3, 4];
+      stories.forEach(function (story, idx) {
+        var card = document.createElement('button');
+        card.className = 'polaroid';
+        card.style.transform = 'rotate(' + rotations[idx % rotations.length] + 'deg)';
+        card.style.boxShadow = '3px 5px 0 rgba(0,0,0,0.15)';
+        card.innerHTML =
+          '<div class="polaroid-photo" style="background:' + story.color + ';"></div>' +
+          '<div class="stamp">' + story.stamp + '</div>' +
+          '<div class="polaroid-name">' + story.name + '</div>' +
+          '<div class="polaroid-quote">' + story.quote + '</div>';
+        card.addEventListener('click', function () { openStory(idx); });
+        row.appendChild(card);
+      });
+
+      var currentStory = 0;
+      var currentImg = 0;
+      var overlay = document.getElementById('overlay');
+      var overlayColor = document.getElementById('overlayColor');
+      var overlayTitle = document.getElementById('overlayTitle');
+      var overlayText = document.getElementById('overlayText');
+      var dots = document.getElementById('dots');
+
+      function render() {
+        var s = stories[currentStory];
+        currentImg = (currentImg + s.images.length) % s.images.length;
+        overlayColor.style.background = s.images[currentImg];
+        overlayTitle.textContent = s.title;
+        overlayText.textContent = s.text;
+        dots.innerHTML = '';
+        s.images.forEach(function (_, i) {
+          var d = document.createElement('span');
+          if (i === currentImg) d.className = 'active';
+          dots.appendChild(d);
+        });
+      }
+
+      function openStory(idx) {
+        currentStory = idx;
+        currentImg = 0;
+        render();
+        overlay.classList.add('open');
+      }
+
+      document.getElementById('closeBtn').addEventListener('click', function () { overlay.classList.remove('open'); });
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) overlay.classList.remove('open'); });
+      document.getElementById('prevBtn').addEventListener('click', function () { currentImg--; render(); });
+      document.getElementById('nextBtn').addEventListener('click', function () { currentImg++; render(); });
+      document.addEventListener('keydown', function (e) {
+        if (!overlay.classList.contains('open')) return;
+        if (e.key === 'Escape') overlay.classList.remove('open');
+        if (e.key === 'ArrowLeft') { currentImg--; render(); }
+        if (e.key === 'ArrowRight') { currentImg++; render(); }
+      });
+    })();
+  </script>
+</body>
+</html>

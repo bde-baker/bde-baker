@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDE Baker — Le Club</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .club-board {
+      position: relative;
+      margin-top: 2.2rem;
+      height: 700px;
+    }
+    .club-card {
+      position: absolute;
+      width: 180px;
+      box-shadow: 4px 6px 0 rgba(0,0,0,0.15);
+    }
+    @media (max-width: 760px) {
+      .club-board {
+        position: static;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .club-card {
+        position: static !important;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-row">
+        <a href="index.html" class="brand">
+          <img src="images/logo/logo-bde-baker.png" alt="Logo BDE Baker">
+          <span class="brand-name">BDE BAKER</span>
+        </a>
+
+        <nav class="nav-tabs" aria-label="Navigation principale">
+          <a href="index.html" class="tab blue">ACCUEIL</a>
+          <a href="le-club.html" class="tab pink">LE CLUB</a>
+          <div class="tab-group">
+            <span class="tab lime" tabindex="0">NOS MOMENTS ▾</span>
+            <div class="submenu">
+              <a href="nos-moments/sante.html">NOS ACTIONS POUR LA SANTÉ</a>
+              <a href="nos-moments/weekend.html">WEEK-END D'INTÉGRATION</a>
+            </div>
+          </div>
+          <div class="tab-group">
+            <span class="tab orange" tabindex="0">ERASMUS ▾</span>
+            <div class="submenu">
+              <a href="erasmus/destinations.html">DESTINATIONS</a>
+              <a href="erasmus/voyages.html">VOYAGES</a>
+            </div>
+          </div>
+          <a href="ressources.html" class="tab purple">RESSOURCES</a>
+        </nav>
+
+        <button class="burger-btn" id="burgerBtn" aria-label="Ouvrir le menu">☰</button>
+      </div>
+      <div class="nav-divider"></div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Navigation mobile">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Fermer le menu">×</button>
+    <div class="mobile-menu-links">
+      <a href="index.html" style="background:var(--blue); color:var(--navy); transform:rotate(-2deg);">ACCUEIL</a>
+      <a href="le-club.html" style="background:var(--pink); color:var(--white); transform:rotate(2deg);">LE CLUB</a>
+      <a href="nos-moments/sante.html" style="background:var(--lime); color:#4a5a10; transform:rotate(-1deg);">NOS ACTIONS POUR LA SANTÉ</a>
+      <a href="nos-moments/weekend.html" style="background:var(--lime); color:#4a5a10; transform:rotate(1deg);">WEEK-END D'INTÉGRATION</a>
+      <a href="erasmus/destinations.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(-1deg);">DESTINATIONS</a>
+      <a href="erasmus/voyages.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(1deg);">VOYAGES</a>
+      <a href="ressources.html" style="background:var(--purple); color:var(--white); transform:rotate(0deg);">RESSOURCES</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-title">le club</div>
+    <div class="page-subtitle">le bureau, poste par poste — ce qu'on dit qu'on fait, et ce qu'on fait vraiment.</div>
+
+    <div class="club-board">
+
+      <div class="club-card card" style="top:0; left:15px; border-color:#d8d3de; transform:rotate(-4deg); box-shadow-color:rgba(138,92,160,0.25);">
+        <span class="tape" style="left:60%; background:#b79bc7; transform:translateX(-50%) rotate(4deg);"></span>
+        <div class="card-title">président</div>
+        <div class="card-text">faire croire à tout le monde que t'as un plan, alors que le plan c'est surtout excel et de l'espoir.</div>
+      </div>
+
+      <div class="club-card card" style="top:170px; left:15px; border-color:#e6cdd7; transform:rotate(2deg);">
+        <span class="tape" style="right:20%; background:#ff8bae; transform:rotate(6deg);"></span>
+        <div class="card-title">vp évent</div>
+        <div class="card-text">comment tromper toute une asso en leur faisant croire que t'es responsable alors que t'aimes juste aller en soirée.</div>
+      </div>
+
+      <div class="club-card card" style="top:470px; left:15px; border-color:#e0e0b0; transform:rotate(-3deg);">
+        <span class="tape" style="left:40%; background:#d7e456; transform:translateX(-50%) rotate(-4deg);"></span>
+        <div class="card-title">vp solidarité</div>
+        <div class="card-text">rappeler à tout le monde de boire de l'eau, cinq minutes avant de servir les shots.</div>
+      </div>
+
+      <div class="club-card card" style="top:40px; left:250px; border-color:#e3d2c3; transform:rotate(3deg);">
+        <span class="tape" style="left:30%; background:#ff9c5a; transform:rotate(-8deg);"></span>
+        <div class="card-title">trésorier</div>
+        <div class="card-text">dire non à toutes les dépenses, sauf celle du dernier jour, juste avant l'ag.</div>
+      </div>
+
+      <div class="club-card card" style="top:250px; left:250px; border-color:#e6cdd7; transform:rotate(-5deg);">
+        <span class="tape" style="left:60%; background:#ff8bae; transform:translateX(-50%) rotate(-5deg);"></span>
+        <div class="card-title">vp comm'</div>
+        <div class="card-text">poster une story à 23h58 pour un event à 20h, et faire croire que c'était voulu.</div>
+      </div>
+
+      <div class="club-card card" style="top:440px; left:250px; border-color:#d8d3de; transform:rotate(5deg);">
+        <span class="tape" style="left:30%; background:#b79bc7; transform:rotate(5deg);"></span>
+        <div class="card-title">cm comm'</div>
+        <div class="card-text">prendre 400 photos par soirée pour n'en garder que trois où tout le monde a les yeux ouverts.</div>
+      </div>
+
+      <div class="club-card card" style="top:10px; left:485px; width:175px; border-color:#cfd6c9; transform:rotate(-3deg);">
+        <span class="tape" style="left:50%; background:#9fc260; transform:translateX(-50%) rotate(-6deg);"></span>
+        <div class="card-title">secrétaire</div>
+        <div class="card-text">écrire des comptes-rendus que personne ne relira, mais avec une orthographe irréprochable.</div>
+      </div>
+
+      <div class="club-card card" style="top:340px; left:485px; width:175px; border-color:#c9dce6; transform:rotate(4deg);">
+        <span class="tape" style="right:20%; background:#8fc9e8; transform:rotate(7deg);"></span>
+        <div class="card-title">vp cafét'</div>
+        <div class="card-text">gérer le seul endroit où toute l'asso se croise sans avoir à organiser un évènement pour ça.</div>
+      </div>
+
+      <div class="club-card card" style="top:520px; left:485px; width:175px; border-color:#cfd6c9; transform:rotate(-2deg);">
+        <span class="tape" style="right:25%; background:#9fc260; transform:rotate(-6deg);"></span>
+        <div class="card-title">cm cafétéria</div>
+        <div class="card-text">savoir exactement combien de paquets de pâtes il reste, sans jamais avoir fait l'inventaire.</div>
+      </div>
+
+    </div>
+
+    <div style="position:relative; margin-top:1rem; transform:rotate(-1deg); display:inline-block;">
+      <div style="background:var(--lime); color:#4a5a10; font-weight:700; font-size:15px; padding:14px 18px; border-radius:2px; box-shadow:4px 6px 0 rgba(74,90,16,0.25);">
+        rejoins-nous — le bureau recrute, aucune expérience en café renversé requise.
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <img src="images/logo/logo-bde-baker.png" alt="Logo BDE Baker" style="height:60px; transform:rotate(-3deg);">
+          <div style="font-style:italic; font-size:12px; margin-top:8px; max-width:200px;">la vie de bde baker, page après page.</div>
+        </div>
+
+        <div class="footer-col">
+          <h3>LIENS RAPIDES</h3>
+          <div class="footer-links">
+            <a href="index.html">ACCUEIL</a>
+            <a href="le-club.html">LE CLUB</a>
+            <a href="nos-moments/sante.html">NOS MOMENTS</a>
+            <a href="erasmus/destinations.html">ERASMUS</a>
+            <a href="ressources.html">RESSOURCES</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3>SUIVEZ-NOUS</h3>
+          <div class="social-row">
+            <a href="#" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
+            <a href="#" class="social-icon" style="background:var(--blue); color:var(--navy); transform:rotate(5deg);">IN</a>
+          </div>
+        </div>
+
+        <div class="footer-col" style="flex:1.4;">
+          <h3>UNE QUESTION ?</h3>
+          <div style="font-style:italic; font-size:13px; margin-top:10px; line-height:1.5;">
+            écris-nous, on répond (presque) toujours.<br>
+            <span style="font-weight:700; font-style:normal;">contact@bdebaker.fr</span>
+          </div>
+          <div style="font-size:12px; margin-top:10px; line-height:1.5;">
+            Lycée Polyvalent Joséphine Baker<br>
+            85 avenue Jean Baylet<br>
+            31100 Toulouse
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-rule"></div>
+      <div class="footer-legal">© BUREAU DES ETUDIANTS DE BAKER — SIRET 993 967 611 00019 — mentions légales — crédits</div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
