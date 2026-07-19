@@ -15,25 +15,29 @@
     #board {
       flex: 1.3;
       min-width: 320px;
-      background: #f4f0f7;
-      border: 1px solid #e2d8ea;
-      border-radius: 4px;
       position: relative;
-      height: 380px;
+      border-radius: 4px;
       overflow: hidden;
+      border: 1px solid #e2d8ea;
+    }
+    #board img {
+      display: block;
+      width: 100%;
+      height: auto;
     }
     .pin {
       position: absolute;
-      width: 26px;
-      height: 26px;
+      width: 22px;
+      height: 22px;
       border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
+      transform: translate(-50%, -100%) rotate(-45deg);
       cursor: pointer;
-      box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
-      border: none;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+      border: 2px solid #fff;
       padding: 0;
     }
     .pin:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+    .pin.active { box-shadow: 0 0 0 3px rgba(0,0,90,0.35); }
     #panel {
       flex: 1;
       min-width: 260px;
@@ -64,7 +68,7 @@
     .company-name { font-weight: 700; font-size: 13px; color: var(--navy); }
     .company-desc { font-size: 12px; color: var(--navy); margin-top: 4px; line-height: 1.4; }
 
-    /* Version mobile : liste de pays dépliable au lieu du plateau de punaises */
+    /* Version mobile : liste de pays dépliable au lieu de la carte */
     .dest-mobile-list { display: none; }
     @media (max-width: 760px) {
       .dest-layout { display: none; }
@@ -135,18 +139,22 @@
     <div class="page-title">destinations</div>
     <div class="page-subtitle">clique sur une punaise pour découvrir les entreprises partenaires du pays.</div>
 
-    <!-- Desktop : plateau de punaises -->
+    <!-- Desktop : carte du monde avec punaises -->
     <div class="dest-layout">
       <div id="board">
-        <button class="pin" data-country="portugal" style="top:150px; left:60px; background:var(--purple);" aria-label="Portugal"></button>
-        <button class="pin" data-country="allemagne" style="top:80px; left:220px; background:var(--pink);" aria-label="Allemagne"></button>
-        <button class="pin" data-country="pologne" style="top:70px; left:290px; background:var(--blue);" aria-label="Pologne"></button>
-        <button class="pin" data-country="italie" style="top:180px; left:250px; background:var(--lime);" aria-label="Italie"></button>
-        <button class="pin" data-country="suede" style="top:30px; left:250px; background:var(--orange);" aria-label="Suède"></button>
-        <button class="pin" data-country="japon" style="top:120px; left:420px; background:var(--green);" aria-label="Japon"></button>
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/BlankMap-World-Equirectangular.svg" alt="Carte du monde" width="940" height="477">
 
-        <div style="position:absolute; top:250px; left:40px; font-weight:700; font-size:11px; color:var(--purple); transform:rotate(-3deg);">europe</div>
-        <div style="position:absolute; top:150px; left:400px; font-weight:700; font-size:11px; color:var(--purple); transform:rotate(2deg);">asie</div>
+        <button class="pin" data-country="allemagne" style="top:21.7%; left:52.8%; background:var(--purple);" aria-label="Allemagne"></button>
+        <button class="pin" data-country="angleterre" style="top:21.4%; left:50.0%; background:var(--pink);" aria-label="Angleterre"></button>
+        <button class="pin" data-country="belgique" style="top:21.8%; left:51.2%; background:var(--blue);" aria-label="Belgique"></button>
+        <button class="pin" data-country="espagne" style="top:27.6%; left:49.0%; background:var(--lime);" aria-label="Espagne"></button>
+        <button class="pin" data-country="finlande" style="top:16.6%; left:56.9%; background:var(--orange);" aria-label="Finlande"></button>
+        <button class="pin" data-country="hongkong" style="top:37.6%; left:81.7%; background:var(--green);" aria-label="Hong Kong"></button>
+        <button class="pin" data-country="irlande" style="top:20.4%; left:48.3%; background:var(--purple);" aria-label="Irlande"></button>
+        <button class="pin" data-country="italie" style="top:26.7%; left:53.5%; background:var(--pink);" aria-label="Italie"></button>
+        <button class="pin" data-country="mexique" style="top:39.2%; left:22.5%; background:var(--blue);" aria-label="Mexique"></button>
+        <button class="pin" data-country="norvege" style="top:16.7%; left:53.0%; background:var(--lime);" aria-label="Norvège"></button>
+        <button class="pin" data-country="paysbas" style="top:20.9%; left:51.4%; background:var(--orange);" aria-label="Pays-Bas"></button>
       </div>
 
       <div id="panel">
@@ -195,7 +203,6 @@
           <h3>SUIVEZ-NOUS</h3>
           <div class="social-row">
             <a href="https://www.instagram.com/bde.baker/" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
-            <!<a href="#" class="social-icon" style="background:var(--blue); color:var(--navy); transform:rotate(5deg);">IN</a>>
           </div>
         </div>
 
@@ -223,37 +230,87 @@
   <script>
     (function () {
       var data = {
-        portugal: [
-          { name: "Nova Studio", desc: "Agence de design produit, accueille des stagiaires en fin de cursus." },
-          { name: "Lisboa Tech", desc: "Start-up spécialisée en UX pour applications mobiles." }
-        ],
-        allemagne: [
-          { name: "Berlin Werk", desc: "Studio de design graphique et identité visuelle, forte culture typographique." },
-          { name: "MünchenLabs", desc: "Bureau d'innovation produit, collabore avec des écoles de design locales." }
-        ],
-        pologne: [
-          { name: "Kraków Studio", desc: "Agence de branding pour marques indépendantes." }
-        ],
-        italie: [
-          { name: "Milano Design Co.", desc: "Studio historique de design d'objet, propose des stages courts." },
-          { name: "Torino Creative", desc: "Agence pluridisciplinaire, design & communication." }
-        ],
-        suede: [
-          { name: "Stockholm Form", desc: "Studio de design scandinave minimaliste, très sélectif." }
-        ],
-        japon: [
-          { name: "Tokyo Atelier", desc: "Studio de design d'expérience, collabore avec des universités partenaires." },
-          { name: "Kyoto Craft Lab", desc: "Atelier mêlant artisanat traditionnel et design contemporain." }
-        ]
+        allemagne: {
+          label: "Allemagne",
+          companies: [
+            { name: "Berlin Werk", desc: "Studio de design graphique et identité visuelle, forte culture typographique." },
+            { name: "MünchenLabs", desc: "Bureau d'innovation produit, collabore avec des écoles de design locales." }
+          ]
+        },
+        angleterre: {
+          label: "Angleterre",
+          companies: [
+            { name: "Shoreditch Studio", desc: "Agence de design digital basée à Londres, forte culture branding." },
+            { name: "Northline Design", desc: "Studio spécialisé en design éditorial et packaging." }
+          ]
+        },
+        belgique: {
+          label: "Belgique",
+          companies: [
+            { name: "Bruxelles Atelier", desc: "Collectif de designers indépendants, projets culturels et associatifs." }
+          ]
+        },
+        espagne: {
+          label: "Espagne",
+          companies: [
+            { name: "Madrid Studio", desc: "Agence de design produit et mobilier contemporain." },
+            { name: "Barcelona Creative", desc: "Studio pluridisciplinaire, design d'espace et scénographie." }
+          ]
+        },
+        finlande: {
+          label: "Finlande",
+          companies: [
+            { name: "Helsinki Form", desc: "Studio de design nordique minimaliste, spécialisé en mobilier." }
+          ]
+        },
+        hongkong: {
+          label: "Hong Kong",
+          companies: [
+            { name: "Kowloon Design Lab", desc: "Studio de design produit tourné vers l'industrie électronique." },
+            { name: "Victoria Creative", desc: "Agence de design d'expérience et retail." }
+          ]
+        },
+        irlande: {
+          label: "Irlande",
+          companies: [
+            { name: "Dublin Craft Studio", desc: "Atelier mêlant artisanat traditionnel irlandais et design contemporain." }
+          ]
+        },
+        italie: {
+          label: "Italie",
+          companies: [
+            { name: "Milano Design Co.", desc: "Studio historique de design d'objet, propose des stages courts." },
+            { name: "Torino Creative", desc: "Agence pluridisciplinaire, design & communication." }
+          ]
+        },
+        mexique: {
+          label: "Mexique",
+          companies: [
+            { name: "CDMX Estudio", desc: "Studio de design textile et artisanat contemporain mexicain." }
+          ]
+        },
+        norvege: {
+          label: "Norvège",
+          companies: [
+            { name: "Oslo Form", desc: "Studio de design scandinave minimaliste, très sélectif." }
+          ]
+        },
+        paysbas: {
+          label: "Pays-Bas",
+          companies: [
+            { name: "Amsterdam Studio", desc: "Agence de design graphique et signalétique urbaine." },
+            { name: "Rotterdam Lab", desc: "Bureau d'architecture d'intérieur et design d'espace." }
+          ]
+        }
       };
 
       var panelTitle = document.getElementById('panelTitle');
       var panelList = document.getElementById('panelList');
 
       function renderDesktop(country) {
-        panelTitle.textContent = country;
+        panelTitle.textContent = data[country].label;
         panelList.innerHTML = '';
-        data[country].forEach(function (company) {
+        data[country].companies.forEach(function (company) {
           var card = document.createElement('div');
           card.className = 'company-card';
           var name = document.createElement('div');
@@ -270,6 +327,8 @@
 
       document.querySelectorAll('.pin').forEach(function (pin) {
         pin.addEventListener('click', function () {
+          document.querySelectorAll('.pin').forEach(function (p) { p.classList.remove('active'); });
+          pin.classList.add('active');
           renderDesktop(pin.getAttribute('data-country'));
         });
       });
@@ -283,8 +342,8 @@
         var header = document.createElement('div');
         header.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
         var label = document.createElement('div');
-        label.style.cssText = 'font-weight:700; font-size:13px; text-transform:capitalize;';
-        label.textContent = country;
+        label.style.cssText = 'font-weight:700; font-size:13px;';
+        label.textContent = data[country].label;
         var arrow = document.createElement('div');
         arrow.style.cssText = 'font-size:12px; color:var(--purple);';
         arrow.textContent = '▾';
@@ -293,7 +352,7 @@
 
         var companiesDiv = document.createElement('div');
         companiesDiv.className = 'companies';
-        data[country].forEach(function (company) {
+        data[country].companies.forEach(function (company) {
           var name = document.createElement('div');
           name.style.cssText = 'font-weight:700; font-size:12px;';
           name.textContent = company.name;

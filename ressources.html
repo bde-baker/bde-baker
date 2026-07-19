@@ -25,6 +25,13 @@
       height: 110px;
       border-radius: 2px;
       flex-shrink: 0;
+      overflow: hidden;
+    }
+    .res-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .res-label {
       display: inline-block;
@@ -143,7 +150,9 @@
           et <a href="https://www.lacartedescolocs.fr/" target="_blank">La Carte des Colocs</a> pour les colocations. n'oublie pas de demander les APL !
         </div>
       </div>
-      <div class="res-photo" style="background:var(--blue); transform:rotate(2deg); box-shadow:3px 4px 0 rgba(143,201,232,0.3);"></div>
+      <div class="res-photo" style="transform:rotate(2deg); box-shadow:3px 4px 0 rgba(143,201,232,0.3);">
+        <img src="images/ressources/logement.jpg" alt="Logement étudiant">
+      </div>
     </div>
 
     <!-- CROUS -->
@@ -180,7 +189,9 @@
 
     <!-- Santé -->
     <div class="res-section">
-      <div class="res-photo" style="background:var(--pink); transform:rotate(-2deg); box-shadow:3px 4px 0 rgba(255,139,174,0.3);"></div>
+      <div class="res-photo" style="transform:rotate(-2deg); box-shadow:3px 4px 0 rgba(255,139,174,0.3);">
+        <img src="images/ressources/sante.jpg" alt="Santé étudiante">
+      </div>
       <div class="res-text">
         <span class="res-label" style="background:var(--pink); color:#fff; transform:rotate(-2deg);">
           <span class="tape" style="left:55%; transform:translateX(-50%) rotate(-5deg);"></span>
@@ -231,7 +242,6 @@
           <h3>SUIVEZ-NOUS</h3>
           <div class="social-row">
             <a href="https://www.instagram.com/bde.baker/" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
-            <a href="#" class="social-icon" style="background:var(--blue); color:var(--navy); transform:rotate(5deg);">IN</a>
           </div>
         </div>
 

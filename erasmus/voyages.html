@@ -20,7 +20,8 @@
       cursor: pointer;
       position: relative;
     }
-    .polaroid-photo { height: 130px; border-radius: 2px; }
+    .polaroid-photo { height: 130px; border-radius: 2px; overflow: hidden; }
+    .polaroid-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .stamp {
       position: absolute;
       top: 6px;
@@ -66,6 +67,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #f4f0f7;
+    }
+    .overlay-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .overlay-btn {
       position: absolute;
@@ -162,9 +170,9 @@
   <div id="overlay" role="dialog" aria-modal="true" aria-label="Témoignage complet">
     <div class="overlay-box">
       <button class="overlay-btn" id="closeBtn" aria-label="Fermer">×</button>
-      <div class="overlay-image" style="background:#8a5ca0;">
+      <div class="overlay-image">
         <button class="overlay-btn" id="prevBtn" style="left:8px;" aria-label="Photo précédente">‹</button>
-        <div id="overlayColor" style="width:100%; height:100%;"></div>
+        <img id="overlayImage" src="" alt="">
         <button class="overlay-btn" id="nextBtn" style="right:8px;" aria-label="Photo suivante">›</button>
         <div id="dots"></div>
       </div>
@@ -199,7 +207,6 @@
           <h3>SUIVEZ-NOUS</h3>
           <div class="social-row">
             <a href="https://www.instagram.com/bde.baker/" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
-            <a href="#" class="social-icon" style="background:var(--blue); color:var(--navy); transform:rotate(5deg);">IN</a>
           </div>
         </div>
 
@@ -227,10 +234,10 @@
   <script>
     (function () {
       var stories = [
-        { name: "léa — lisbonne", quote: "« le café y est infect mais les gens adorables. »", stamp: "PT", color: "#8fc9e8", title: "léa — lisbonne", text: "Léa est partie un semestre à Lisbonne en design d'espace. Elle raconte des cours plus pratiques qu'en France, des colocataires devenus des amis pour la vie, et un rythme de vie beaucoup plus lent qu'elle a mis du temps à retrouver au retour.", images: ["#8fc9e8", "#a9d6ee", "#6fb3d8"] },
-        { name: "yanis — berlin", quote: "« j'ai appris plus en 6 mois qu'en 2 ans d'école. »", stamp: "DE", color: "#ff8bae", title: "yanis — berlin", text: "Yanis a fait son stage de fin d'année dans un studio de design graphique berlinois. Il parle d'une culture typographique très exigeante, de longues discussions sur la grille et la structure, et d'une ville qui ne dort jamais vraiment.", images: ["#ff8bae", "#ffa6c3", "#f5709a"] },
-        { name: "chloé — milan", quote: "« mon italien s'est arrêté à \u201cun caffè, per favore\u201d. »", stamp: "IT", color: "#d7e456", title: "chloé — milan", text: "Chloé a passé un semestre à Milan en design d'objet. Elle décrit un enseignement très centré sur l'histoire du design italien, des visites d'ateliers réguliers, et une vie étudiante rythmée par les apéros du soir.", images: ["#d7e456", "#e3ec84", "#c3d43a"] },
-        { name: "nathan — tokyo", quote: "« le silence dans le métro m'a manqué en rentrant. »", stamp: "JP", color: "#9fc260", title: "nathan — tokyo", text: "Nathan est parti un an à Tokyo dans un atelier de design d'expérience. Il raconte un choc culturel fort au début, une rigueur de travail impressionnante, et une ville dont l'énergie particulière lui manque encore aujourd'hui.", images: ["#9fc260", "#b6d484", "#87ad45"] }
+        { name: "léa — lisbonne", quote: "« le café y est infect mais les gens adorables. »", stamp: "PT", cover: "../images/voyages/lea-lisbonne-cover.jpg", title: "léa — lisbonne", text: "Léa est partie un semestre à Lisbonne en design d'espace. Elle raconte des cours plus pratiques qu'en France, des colocataires devenus des amis pour la vie, et un rythme de vie beaucoup plus lent qu'elle a mis du temps à retrouver au retour.", images: ["../images/voyages/lea-lisbonne-1.jpg", "../images/voyages/lea-lisbonne-2.jpg", "../images/voyages/lea-lisbonne-3.jpg"] },
+        { name: "yanis — berlin", quote: "« j'ai appris plus en 6 mois qu'en 2 ans d'école. »", stamp: "DE", cover: "../images/voyages/yanis-berlin-cover.jpg", title: "yanis — berlin", text: "Yanis a fait son stage de fin d'année dans un studio de design graphique berlinois. Il parle d'une culture typographique très exigeante, de longues discussions sur la grille et la structure, et d'une ville qui ne dort jamais vraiment.", images: ["../images/voyages/yanis-berlin-1.jpg", "../images/voyages/yanis-berlin-2.jpg", "../images/voyages/yanis-berlin-3.jpg"] },
+        { name: "chloé — milan", quote: "« mon italien s'est arrêté à \u201cun caffè, per favore\u201d. »", stamp: "IT", cover: "../images/voyages/chloe-milan-cover.jpg", title: "chloé — milan", text: "Chloé a passé un semestre à Milan en design d'objet. Elle décrit un enseignement très centré sur l'histoire du design italien, des visites d'ateliers réguliers, et une vie étudiante rythmée par les apéros du soir.", images: ["../images/voyages/chloe-milan-1.jpg", "../images/voyages/chloe-milan-2.jpg", "../images/voyages/chloe-milan-3.jpg"] },
+        { name: "nathan — tokyo", quote: "« le silence dans le métro m'a manqué en rentrant. »", stamp: "JP", cover: "../images/voyages/nathan-tokyo-cover.jpg", title: "nathan — tokyo", text: "Nathan est parti un an à Tokyo dans un atelier de design d'expérience. Il raconte un choc culturel fort au début, une rigueur de travail impressionnante, et une ville dont l'énergie particulière lui manque encore aujourd'hui.", images: ["../images/voyages/nathan-tokyo-1.jpg", "../images/voyages/nathan-tokyo-2.jpg", "../images/voyages/nathan-tokyo-3.jpg"] }
       ];
 
       var row = document.getElementById('polaroidRow');
@@ -241,7 +248,7 @@
         card.style.transform = 'rotate(' + rotations[idx % rotations.length] + 'deg)';
         card.style.boxShadow = '3px 5px 0 rgba(0,0,0,0.15)';
         card.innerHTML =
-          '<div class="polaroid-photo" style="background:' + story.color + ';"></div>' +
+          '<div class="polaroid-photo"><img src="' + story.cover + '" alt="' + story.name + '"></div>' +
           '<div class="stamp">' + story.stamp + '</div>' +
           '<div class="polaroid-name">' + story.name + '</div>' +
           '<div class="polaroid-quote">' + story.quote + '</div>';
@@ -252,7 +259,7 @@
       var currentStory = 0;
       var currentImg = 0;
       var overlay = document.getElementById('overlay');
-      var overlayColor = document.getElementById('overlayColor');
+      var overlayImage = document.getElementById('overlayImage');
       var overlayTitle = document.getElementById('overlayTitle');
       var overlayText = document.getElementById('overlayText');
       var dots = document.getElementById('dots');
@@ -260,7 +267,8 @@
       function render() {
         var s = stories[currentStory];
         currentImg = (currentImg + s.images.length) % s.images.length;
-        overlayColor.style.background = s.images[currentImg];
+        overlayImage.src = s.images[currentImg];
+        overlayImage.alt = s.title;
         overlayTitle.textContent = s.title;
         overlayText.textContent = s.text;
         dots.innerHTML = '';
