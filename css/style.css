@@ -399,6 +399,13 @@ button:focus-visible,
 .rotate-n1 { transform: rotate(-1deg); }
 .rotate-1  { transform: rotate(1deg); }
 
+.collage-photo {
+  height: 90px;
+  border-radius: 2px;
+  width: 100%;
+  object-fit: cover;   /* ← à ajouter : recadre l'image proprement */
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
