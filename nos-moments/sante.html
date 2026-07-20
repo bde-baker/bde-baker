@@ -11,7 +11,8 @@
       grid-template-columns: 1.4fr 1fr 1fr;
       gap: 14px;
       margin-top: 2rem;
-      grid-auto-rows: 120px;
+      grid-auto-rows: minmax(120px, auto);
+      align-items: stretch;
     }
     .photo {
       border-radius: 2px;
@@ -184,12 +185,12 @@
 
     <div class="gallery">
       <button class="photo" data-idx="0" style="grid-row:span 2; transform:rotate(-1deg); box-shadow:3px 5px 0 rgba(143,201,232,0.35);">
-        <img src="../images/sante/stand-prevention.jpg" alt="Mois sans Tabac">
+        <img src="../images/sante/stand-prevention.jpg" alt="Stand de prévention">
         <span class="photo-label"></span>
       </button>
 
       <button class="photo" data-idx="1" style="transform:rotate(2deg); box-shadow:3px 5px 0 rgba(255,139,174,0.3);">
-        <img src="../images/sante/bts2025.jpg" alt="Expérimentation avec Louis Bressoles">
+        <img src="../images/sante/distribution-kits.jpg" alt="Distribution kits">
         <span class="photo-label"></span>
       </button>
 
@@ -198,22 +199,22 @@
       </div>
 
       <button class="photo" data-idx="2" style="transform:rotate(1deg); box-shadow:3px 5px 0 rgba(215,228,86,0.35);">
-        <img src="../images/sante/atelier-bien-etre.jpg" alt="Atelier Nutririon">
+        <img src="../images/sante/atelier-bien-etre.jpg" alt="Atelier bien-être">
         <span class="photo-label"></span>
       </button>
 
       <button class="photo" data-idx="3" style="grid-row:span 2; transform:rotate(2deg); box-shadow:3px 5px 0 rgba(99,153,34,0.25);">
-        <img src="../images/sante/atelier-sommeil.jpg" alt="Distribution Alimentaire">
+        <img src="../images/sante/atelier-sommeil.jpg" alt="Atelier sommeil">
         <span class="photo-label"></span>
       </button>
 
       <button class="photo" data-idx="4" style="transform:rotate(-2deg); box-shadow:3px 5px 0 rgba(255,156,90,0.3);">
-        <img src="../images/sante/intervention-lycee.jpg" alt="Fresque">
+        <img src="../images/sante/intervention-lycee.jpg" alt="Intervention lycée">
         <span class="photo-label"></span>
       </button>
 
       <button class="photo" data-idx="5" style="transform:rotate(1deg); box-shadow:3px 5px 0 rgba(138,92,160,0.25);">
-        <img src="../images/sante/forum-sante-campus.jpg" alt="Le BDE se forme">
+        <img src="../images/sante/forum-sante-campus.jpg" alt="Forum santé campus">
         <span class="photo-label"></span>
       </button>
 
@@ -312,12 +313,12 @@
   <script>
     (function () {
       var events = [
-        { name: "Mois sans Tabac", desc: "Le BDE Baker a invité la CJC (Consultation Jeunes Consomateurs) pour venir faire de la prévention quand à l'addiction au tabac et à ses risques mais ils ne se sont pas arrêter là !<br>La CJC a su divertir et intéresser les élèves et étudiants du Lycée Joséphine Baker sur le tabac et ses riques mais aussi, sur les différents types d'addictions que l'on peut connaître (ou non).", images: ["../images/sante/stand-prevention-1.jpg", "../images/sante/stand-prevention-2.jpg", "../images/sante/stand-prevention-3.jpg"] },
-        { name: "Expérimentation avec Louis Bressoles", desc: "Cette fois, place à une performance singulière : nous incarnions des personnes fumeur·euse·s qui, en construisant des cendriers, finissaient par… oublier l’idée de fumer.<br>Une action simple mais puissante, où la création devient un geste de prévention.<br>Sur le campus, la performance a pris vie, questionnant nos habitudes et ouvrant un espace collectif pour penser autrement la prévention. ", images: ["../images/sante/bts2025-1.jpg", "../images/sante/bts2025-2.jpg", "../images/sante/bts2025-3.jpg"] },
-        { name: "Atelier Nutririon", desc: "Atelier sur la nutrition et apprendre à manger plus sainement. Lors de l'édition 2026 de Bouge Ta Santé, nous avons accompagner le projet d'une étudiante de 3ème année autour de l'alimentation chez les étudiants suivie par la nutritioniste du Service de Santé Étudiante.", images: ["../images/sante/bts2026-1.jpg", "../images/sante/bts2026-2.jpg"] },
-        { name: "Distribution Alimentaire", desc: "Grâce à notre affiliation à l'AGEMP, nous organisons des distributions alimentaires. Les paniers sont diverses et variés, permettant une alimentation plus variées et réduire ses dépenses mensuelles.", images: ["../images/sante/atelier-sommeil-1.jpg", "../images/sante/atelier-sommeil-2.jpg"] },
-        { name: "Fresque", desc: "La fresque est un événement que notre BDE fait depuis 2 ans, même si un peu éloigné de la santé, il reste un moment de partage et de cohésion au sein de la vie des étudiant en plus d'embellir le lycée.", images: ["../images/sante/intervention-lycee-1.jpg", "../images/sante/intervention-lycee-2.jpg"] },
-        { name: "Le BDE se forme", desc: "Participation au forum santé organisé par l'université, stand tenu toute la journée.", images: ["../images/sante/forum-sante-campus-1.jpg", "../images/sante/forum-sante-campus-2.jpg"] },
+        { name: "Stand de prévention", desc: "Stand tenu lors de la soirée intég 2025, distribution de kits de prévention et échanges sans jugement avec les étudiants.", images: ["../images/sante/stand-prevention-1.jpg", "../images/sante/stand-prevention-2.jpg", "../images/sante/stand-prevention-3.jpg"] },
+        { name: "Distribution kits", desc: "Distribution de kits de contraception et de réduction des risques, en partenariat avec le service santé de l'université.", images: ["../images/sante/distribution-kits-1.jpg", "../images/sante/distribution-kits-2.jpg", "../images/sante/distribution-kits-3.jpg"] },
+        { name: "Atelier bien-être", desc: "Atelier de sensibilisation au bien-être mental organisé avec des intervenants extérieurs.", images: ["../images/sante/atelier-bien-etre-1.jpg", "../images/sante/atelier-bien-etre-2.jpg"] },
+        { name: "Atelier sommeil", desc: "Atelier sommeil organisé pendant la semaine des partiels pour aider les étudiants à mieux gérer leur rythme.", images: ["../images/sante/atelier-sommeil-1.jpg", "../images/sante/atelier-sommeil-2.jpg"] },
+        { name: "Intervention lycée", desc: "Intervention de prévention dans un lycée partenaire, menée par des membres du bureau.", images: ["../images/sante/intervention-lycee-1.jpg", "../images/sante/intervention-lycee-2.jpg"] },
+        { name: "Forum santé campus", desc: "Participation au forum santé organisé par l'université, stand tenu toute la journée.", images: ["../images/sante/forum-sante-campus-1.jpg", "../images/sante/forum-sante-campus-2.jpg"] },
         { name: "Collecte solidaire", desc: "Collecte de produits de première nécessité organisée avec des associations partenaires.", images: ["../images/sante/collecte-solidaire-1.jpg", "../images/sante/collecte-solidaire-2.jpg"] },
         { name: "Journée partenaires", desc: "Journée de rencontre avec les associations et institutions qui soutiennent nos actions santé.", images: ["../images/sante/journee-partenaires-1.jpg", "../images/sante/journee-partenaires-2.jpg"] }
       ];
