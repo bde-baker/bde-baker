@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BDE Baker — Destinations</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .dest-layout {
+      display: flex;
+      gap: 24px;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    #board {
+      flex: 1.3;
+      min-width: 320px;
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid #e2d8ea;
+      background: #eef4fa;
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      aspect-ratio: 2 / 1;
+    }
+    #board.dragging { cursor: grabbing; }
+    #mapSvgHolder {
+      position: absolute;
+      inset: 0;
+      line-height: 0;
+    }
+    #mapSvgHolder svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    /* Habillage du fond de carte vectoriel */
+    #mapSvgHolder svg path {
+      fill: #e3dcec;
+      stroke: #b9a8cf;
+      stroke-width: 0.6;
+    }
+    #mapSvgHolder svg path.highlight {
+      fill: var(--purple);
+    }
+    /* Punaises et étiquettes : positionnées en pixels, taille fixe, jamais mises à l'échelle par le zoom */
+    #pinLayer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .pin {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      margin: -16px 0 0 -8px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      cursor: pointer;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+      border: 2px solid #fff;
+      padding: 0;
+      opacity: 0;
+      transition: opacity 0.15s, box-shadow 0.15s;
+      pointer-events: auto;
+    }
+    .pin.ready { opacity: 1; }
+    .pin:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+    .pin.active { box-shadow: 0 0 0 3px rgba(0,0,90,0.35); }
+    .pin-label {
+      position: absolute;
+      transform: translate(-50%, 6px);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--navy);
+      background: rgba(255,255,255,0.95);
+      padding: 2px 6px;
+      border-radius: 3px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s;
+      box-shadow: 1px 2px 0 rgba(0,0,0,0.12);
+      z-index: 6;
+    }
+    .pin-label.shown { opacity: 1; }
+    #panel {
+      flex: 1;
+      min-width: 260px;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 16px;
+      box-shadow: 3px 5px 0 rgba(138,92,160,0.2);
+    }
+    #panelTitle {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--purple);
+    }
+    #panelList {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .company-card {
+      border: 1px solid #eee;
+      border-radius: 2px;
+      padding: 10px;
+      background: #faf8fb;
+    }
+    .company-name { font-weight: 700; font-size: 13px; color: var(--navy); }
+    .company-desc { font-size: 12px; color: var(--navy); margin-top: 4px; line-height: 1.4; }
+
+    .map-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 10;
+    }
+    .map-controls button {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      border: none;
+      background: #fff;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      color: var(--navy);
+    }
+    .map-controls button:hover { background: #f4f0f7; }
+
+    /* Version mobile : liste de pays dépliable au lieu de la carte */
+    .dest-mobile-list { display: none; }
+    @media (max-width: 760px) {
+      .dest-layout { display: none; }
+      .dest-mobile-list { display: flex; flex-direction: column; gap: 10px; margin-top: 1.5rem; }
+      .country-item {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 2px;
+        padding: 12px 14px;
+        cursor: pointer;
+      }
+      .country-item .companies { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0; }
+      .country-item.open .companies { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="nav-row">
+        <a href="../index.html" class="brand">
+          <img src="../images/logo/logo-bde-baker.png" alt="Logo BDE Baker">
+          <span class="brand-name">BDE BAKER</span>
+        </a>
+
+        <nav class="nav-tabs" aria-label="Navigation principale">
+          <a href="../index.html" class="tab blue">ACCUEIL</a>
+          <a href="../le-club.html" class="tab pink">LE CLUB</a>
+          <div class="tab-group">
+            <span class="tab lime" tabindex="0">NOS MOMENTS ▾</span>
+            <div class="submenu">
+              <a href="../nos-moments/sante.html">NOS ACTIONS POUR LA SANTÉ</a>
+              <a href="../nos-moments/weekend.html">WEEK-END D'INTÉGRATION</a>
+              <a href="../nos-moments/activites-sociales.html">ÉVENTS</a>
+            </div>
+          </div>
+          <div class="tab-group">
+            <span class="tab orange" tabindex="0">ERASMUS ▾</span>
+            <div class="submenu">
+              <a href="destinations.html">DESTINATIONS</a>
+              <a href="voyages.html">VOYAGES</a>
+            </div>
+          </div>
+          <a href="../ressources.html" class="tab purple">RESSOURCES</a>
+        </nav>
+
+        <button class="burger-btn" id="burgerBtn" aria-label="Ouvrir le menu">☰</button>
+      </div>
+      <div class="nav-divider"></div>
+    </div>
+  </header>
+
+  <nav class="mobile-menu" id="mobileMenu" aria-label="Navigation mobile">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Fermer le menu">×</button>
+    <div class="mobile-menu-links">
+      <a href="../index.html" style="background:var(--blue); color:var(--navy); transform:rotate(-2deg);">ACCUEIL</a>
+      <a href="../le-club.html" style="background:var(--pink); color:var(--white); transform:rotate(2deg);">LE CLUB</a>
+      <a href="../nos-moments/sante.html" style="background:var(--lime); color:#4a5a10; transform:rotate(-1deg);">NOS ACTIONS POUR LA SANTÉ</a>
+      <a href="../nos-moments/weekend.html" style="background:var(--lime); color:#4a5a10; transform:rotate(1deg);">WEEK-END D'INTÉGRATION</a>
+      <a href="../nos-moments/activites-sociales.html" style="background:var(--lime); color:#4a5a10; transform:rotate(-1deg);">ÉVENTS</a>
+      <a href="destinations.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(-1deg);">DESTINATIONS</a>
+      <a href="voyages.html" style="background:var(--orange); color:#4a2c0a; transform:rotate(1deg);">VOYAGES</a>
+      <a href="../ressources.html" style="background:var(--purple); color:var(--white); transform:rotate(0deg);">RESSOURCES</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <div class="page-title">destinations</div>
+    <div class="page-subtitle">clique sur une punaise pour découvrir les entreprises partenaires du pays. zoome, dézoome, et déplace-toi sur la carte.</div>
+
+    <!-- Desktop : carte vectorielle avec punaises -->
+    <div class="dest-layout">
+      <div id="board">
+        <div id="mapSvgHolder">
+          <!-- La carte SVG vectorielle est injectée ici en JavaScript -->
+        </div>
+
+        <div id="pinLayer">
+          <button class="pin" data-country="allemagne" style="background:var(--purple);" aria-label="Allemagne"></button>
+          <span class="pin-label" data-country="allemagne">Allemagne</span>
+          <button class="pin" data-country="angleterre" style="background:var(--pink);" aria-label="Angleterre"></button>
+          <span class="pin-label" data-country="angleterre">Angleterre</span>
+          <button class="pin" data-country="belgique" style="background:var(--blue);" aria-label="Belgique"></button>
+          <span class="pin-label" data-country="belgique">Belgique</span>
+          <button class="pin" data-country="espagne" style="background:var(--lime);" aria-label="Espagne"></button>
+          <span class="pin-label" data-country="espagne">Espagne</span>
+          <button class="pin" data-country="finlande" style="background:var(--orange);" aria-label="Finlande"></button>
+          <span class="pin-label" data-country="finlande">Finlande</span>
+          <button class="pin" data-country="hongkong" style="background:var(--green);" aria-label="Hong Kong"></button>
+          <span class="pin-label" data-country="hongkong">Hong Kong</span>
+          <button class="pin" data-country="irlande" style="background:var(--purple);" aria-label="Irlande"></button>
+          <span class="pin-label" data-country="irlande">Irlande</span>
+          <button class="pin" data-country="italie" style="background:var(--pink);" aria-label="Italie"></button>
+          <span class="pin-label" data-country="italie">Italie</span>
+          <button class="pin" data-country="mexique" style="background:var(--blue);" aria-label="Mexique"></button>
+          <span class="pin-label" data-country="mexique">Mexique</span>
+          <button class="pin" data-country="norvege" style="background:var(--lime);" aria-label="Norvège"></button>
+          <span class="pin-label" data-country="norvege">Norvège</span>
+          <button class="pin" data-country="paysbas" style="background:var(--orange);" aria-label="Pays-Bas"></button>
+          <span class="pin-label" data-country="paysbas">Pays-Bas</span>
+        </div>
+
+        <div class="map-controls">
+          <button id="zoomIn" type="button" aria-label="Zoomer">+</button>
+          <button id="zoomOut" type="button" aria-label="Dézoomer">−</button>
+          <button id="zoomReset" type="button" aria-label="Réinitialiser le zoom">↺</button>
+        </div>
+      </div>
+
+      <div id="panel">
+        <div id="panelTitle">choisis un pays</div>
+        <div id="panelList"></div>
+      </div>
+    </div>
+
+    <!-- Mobile : liste dépliable -->
+    <div class="dest-mobile-list" id="mobileList"></div>
+
+    <div style="margin-top:2.2rem; transform:rotate(-1deg);">
+      <div style="font-style:italic; font-weight:500; font-size:14px; max-width:480px;">pour plus d'informations sur la mobilité (bourses, informations pratiques ou documents à fournir) :</div>
+      <a href="https://toulouseschoolofdesign.eu/myd.php" target="_blank" style="display:inline-block; margin-top:10px; background:var(--purple); color:#fff; font-weight:700; font-size:14px; padding:12px 18px; border-radius:2px; text-decoration:none; box-shadow:3px 5px 0 rgba(138,92,160,0.3);">Toulouse School of Design and Crafts</a>
+    </div>
+
+    <div style="position:relative; margin-top:2rem; transform:rotate(-1deg); display:inline-block;">
+      <div style="background:var(--lime); color:#4a5a10; font-weight:700; font-size:15px; padding:14px 18px; border-radius:2px; box-shadow:3px 5px 0 rgba(74,90,16,0.25); max-width:480px;">
+        envie de lire de vraies histoires ? direction la partie voyages pour découvrir les témoignages d'étudiants partis en mobilité.
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-col">
+          <img src="../images/logo/logo-bde-baker.png" alt="Logo BDE Baker" style="height:60px; transform:rotate(-3deg);">
+          <div style="font-style:italic; font-size:12px; margin-top:8px; max-width:200px;">la vie de bde baker, page après page.</div>
+        </div>
+
+        <div class="footer-col">
+          <h3>LIENS RAPIDES</h3>
+          <div class="footer-links">
+            <a href="../index.html">ACCUEIL</a>
+            <a href="../le-club.html">LE CLUB</a>
+            <a href="../nos-moments/sante.html">NOS MOMENTS</a>
+            <a href="destinations.html">ERASMUS</a>
+            <a href="../ressources.html">RESSOURCES</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h3>SUIVEZ-NOUS</h3>
+          <div class="social-row">
+            <a href="https://www.instagram.com/bde.baker/" class="social-icon" style="background:var(--pink); color:var(--white); transform:rotate(-6deg);">IG</a>
+          </div>
+        </div>
+
+        <div class="footer-col" style="flex:1.4;">
+          <h3>UNE QUESTION ?</h3>
+          <div style="font-style:italic; font-size:13px; margin-top:10px; line-height:1.5;">
+            écris-nous, on répond (presque) toujours.<br>
+            <span style="font-weight:700; font-style:normal;">bde.mad.rivegauche@gmail.com</span>
+          </div>
+          <div style="font-size:12px; margin-top:10px; line-height:1.5;">
+            Lycée Polyvalent Joséphine Baker<br>
+            85 avenue Jean Baylet<br>
+            31100 Toulouse
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-rule"></div>
+      <div class="footer-legal">© BUREAU DES ETUDIANTS DE BAKER — SIRET 993 967 611 00019 — mentions légales — crédits</div>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+  <script>
+    (function () {
+      // ---- Données des pays et entreprises partenaires ----
+      var data = {
+        allemagne: { code: "de", label: "Allemagne", fallback: { lat: 51.0, lon: 10.0 }, companies: [
+          { name: "Berlin Werk", desc: "Studio de design graphique et identité visuelle, forte culture typographique." },
+          { name: "MünchenLabs", desc: "Bureau d'innovation produit, collabore avec des écoles de design locales." }
+        ]},
+        angleterre: { code: "gb", label: "Angleterre", fallback: { lat: 51.5, lon: -0.13 }, companies: [
+          { name: "Shoreditch Studio", desc: "Agence de design digital basée à Londres, forte culture branding." },
+          { name: "Northline Design", desc: "Studio spécialisé en design éditorial et packaging." }
+        ]},
+        belgique: { code: "be", label: "Belgique", fallback: { lat: 50.85, lon: 4.35 }, companies: [
+          { name: "Bruxelles Atelier", desc: "Collectif de designers indépendants, projets culturels et associatifs." }
+        ]},
+        espagne: { code: "es", pinOverride: true, label: "Espagne", fallback: { lat: 40.4168, lon: -3.7038 }, companies: [
+          { name: "Madrid Studio", desc: "Agence de design produit et mobilier contemporain." },
+          { name: "Barcelona Creative", desc: "Studio pluridisciplinaire, design d'espace et scénographie." }
+        ]},
+        finlande: { code: "fi", label: "Finlande", fallback: { lat: 60.17, lon: 24.94 }, companies: [
+          { name: "Helsinki Form", desc: "Studio de design nordique minimaliste, spécialisé en mobilier." }
+        ]},
+        hongkong: { code: "hk", label: "Hong Kong", fallback: { lat: 22.32, lon: 114.17 }, companies: [
+          { name: "Kowloon Design Lab", desc: "Studio de design produit tourné vers l'industrie électronique." },
+          { name: "Victoria Creative", desc: "Agence de design d'expérience et retail." }
+        ]},
+        irlande: { code: "ie", label: "Irlande", fallback: { lat: 53.35, lon: -6.26 }, companies: [
+          { name: "Dublin Craft Studio", desc: "Atelier mêlant artisanat traditionnel irlandais et design contemporain." }
+        ]},
+        italie: { code: "it", label: "Italie", fallback: { lat: 41.9, lon: 12.5 }, companies: [
+          { name: "Milano Design Co.", desc: "Studio historique de design d'objet, propose des stages courts." },
+          { name: "Torino Creative", desc: "Agence pluridisciplinaire, design & communication." }
+        ]},
+        mexique: { code: "mx", label: "Mexique", fallback: { lat: 19.43, lon: -99.13 }, companies: [
+          { name: "CDMX Estudio", desc: "Studio de design textile et artisanat contemporain mexicain." }
+        ]},
+        norvege: { code: "no", label: "Norvège", fallback: { lat: 59.91, lon: 10.75 }, companies: [
+          { name: "Oslo Form", desc: "Studio de design scandinave minimaliste, très sélectif." }
+        ]},
+        paysbas: { code: "nl", label: "Pays-Bas", fallback: { lat: 52.37, lon: 4.9 }, companies: [
+          { name: "Amsterdam Studio", desc: "Agence de design graphique et signalétique urbaine." },
+          { name: "Rotterdam Lab", desc: "Bureau d'architecture d'intérieur et design d'espace." }
+        ]}
+      };
+
+      var panelTitle = document.getElementById('panelTitle');
+      var panelList = document.getElementById('panelList');
+
+      function renderDesktop(country) {
+        panelTitle.textContent = data[country].label;
+        panelList.innerHTML = '';
+        data[country].companies.forEach(function (company) {
+          var card = document.createElement('div');
+          card.className = 'company-card';
+          var name = document.createElement('div');
+          name.className = 'company-name';
+          name.textContent = company.name;
+          var desc = document.createElement('div');
+          desc.className = 'company-desc';
+          desc.textContent = company.desc;
+          card.appendChild(name);
+          card.appendChild(desc);
+          panelList.appendChild(card);
+        });
+      }
+
+      document.querySelectorAll('.pin').forEach(function (pin) {
+        pin.addEventListener('click', function () {
+          document.querySelectorAll('.pin').forEach(function (p) { p.classList.remove('active'); });
+          pin.classList.add('active');
+          renderDesktop(pin.getAttribute('data-country'));
+        });
+      });
+
+      // Version mobile : liste dépliable générée à partir des mêmes données
+      var mobileList = document.getElementById('mobileList');
+      Object.keys(data).forEach(function (country) {
+        var item = document.createElement('div');
+        item.className = 'country-item';
+
+        var header = document.createElement('div');
+        header.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+        var label = document.createElement('div');
+        label.style.cssText = 'font-weight:700; font-size:13px;';
+        label.textContent = data[country].label;
+        var arrow = document.createElement('div');
+        arrow.style.cssText = 'font-size:12px; color:var(--purple);';
+        arrow.textContent = '▾';
+        header.appendChild(label);
+        header.appendChild(arrow);
+
+        var companiesDiv = document.createElement('div');
+        companiesDiv.className = 'companies';
+        data[country].companies.forEach(function (company) {
+          var name = document.createElement('div');
+          name.style.cssText = 'font-weight:700; font-size:12px;';
+          name.textContent = company.name;
+          var desc = document.createElement('div');
+          desc.style.cssText = 'font-size:11px; margin-top:2px; margin-bottom:8px;';
+          desc.textContent = company.desc;
+          companiesDiv.appendChild(name);
+          companiesDiv.appendChild(desc);
+        });
+
+        item.appendChild(header);
+        item.appendChild(companiesDiv);
+        item.addEventListener('click', function () {
+          item.classList.toggle('open');
+          arrow.textContent = item.classList.contains('open') ? '▴' : '▾';
+        });
+        mobileList.appendChild(item);
+      });
+
+      // ---- Chargement de la carte vectorielle ----
+      var board = document.getElementById('board');
+      var mapSvgHolder = document.getElementById('mapSvgHolder');
+      var pinLayer = document.getElementById('pinLayer');
+      var svg = null;
+
+      // Fenêtre de vue actuelle, exprimée dans le système de coordonnées natif du SVG (jamais en pixels écran)
+      var fullVB = null;   // étendue complète de la carte (zoom = 1)
+      var view = null;     // { x, y, w, h } — portion actuellement affichée
+      var minZoomFactor = 1, maxZoomFactor = 8;
+      var countryPoints = {}; // coordonnées SVG (cx, cy) de chaque pays, calculées une seule fois au chargement
+
+      function updateViewBox() {
+        svg.setAttribute('viewBox', view.x + ' ' + view.y + ' ' + view.w + ' ' + view.h);
+        positionPinsAndLabels();
+      }
+
+      function positionPinsAndLabels() {
+        var rect = board.getBoundingClientRect();
+        Object.keys(countryPoints).forEach(function (country) {
+          var pt = countryPoints[country];
+          var pin = pinLayer.querySelector('.pin[data-country="' + country + '"]');
+          var label = pinLayer.querySelector('.pin-label[data-country="' + country + '"]');
+          var screenX = ((pt.cx - view.x) / view.w) * rect.width;
+          var screenY = ((pt.cy - view.y) / view.h) * rect.height;
+          pin.style.left = screenX + 'px';
+          pin.style.top = screenY + 'px';
+          pin.classList.add('ready');
+          label.style.left = screenX + 'px';
+          label.style.top = screenY + 'px';
+        });
+      }
+
+      function clampView() {
+        if (view.w > fullVB.width) view.w = fullVB.width;
+        if (view.h > fullVB.height) view.h = fullVB.height;
+        view.x = Math.min(fullVB.x + fullVB.width - view.w, Math.max(fullVB.x, view.x));
+        view.y = Math.min(fullVB.y + fullVB.height - view.h, Math.max(fullVB.y, view.y));
+      }
+
+      // Zoome en gardant fixe le point du SVG situé sous (screenX, screenY)
+      function zoomAt(factor, screenX, screenY) {
+        var rect = board.getBoundingClientRect();
+        var svgFocalX = view.x + (screenX / rect.width) * view.w;
+        var svgFocalY = view.y + (screenY / rect.height) * view.h;
+
+        var newW = view.w / factor;
+        var minW = fullVB.width / maxZoomFactor;
+        var maxW = fullVB.width / minZoomFactor;
+        newW = Math.min(maxW, Math.max(minW, newW));
+        var newH = newW * (fullVB.height / fullVB.width);
+
+        view.x = svgFocalX - (screenX / rect.width) * newW;
+        view.y = svgFocalY - (screenY / rect.height) * newH;
+        view.w = newW;
+        view.h = newH;
+        clampView();
+        updateViewBox();
+      }
+
+      function zoomByFactor(factor) {
+        var rect = board.getBoundingClientRect();
+        zoomAt(factor, rect.width / 2, rect.height / 2);
+      }
+
+      function panBy(dxScreen, dyScreen) {
+        var rect = board.getBoundingClientRect();
+        view.x -= (dxScreen / rect.width) * view.w;
+        view.y -= (dyScreen / rect.height) * view.h;
+        clampView();
+        updateViewBox();
+      }
+
+      // Un tracé de pays peut contenir plusieurs sous-tracés disjoints (ex : la péninsule
+      // espagnole + les îles Canaries). On isole chaque sous-tracé et on garde celui dont
+      // la boîte englobante est la plus grande (le territoire principal), pour que la
+      // punaise tombe dessus plutôt qu'au milieu de l'océan entre les deux.
+      function getMainlandCenter(pathEl, svgRoot) {
+        var d = pathEl.getAttribute('d') || '';
+        var subpaths = d.match(/[Mm][^Mm]*/g);
+
+        if (!subpaths || subpaths.length <= 1) {
+          var bbox = pathEl.getBBox();
+          return { cx: bbox.x + bbox.width / 2, cy: bbox.y + bbox.height / 2 };
+        }
+
+        var best = null;
+        var bestArea = -1;
+        subpaths.forEach(function (sub) {
+          var temp = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          temp.setAttribute('d', sub);
+          temp.setAttribute('visibility', 'hidden');
+          svgRoot.appendChild(temp);
+          var bbox = null;
+          try { bbox = temp.getBBox(); } catch (e) { bbox = null; }
+          svgRoot.removeChild(temp);
+          if (bbox && bbox.width > 0 && bbox.height > 0) {
+            var area = bbox.width * bbox.height;
+            if (area > bestArea) {
+              bestArea = area;
+              best = { cx: bbox.x + bbox.width / 2, cy: bbox.y + bbox.height / 2 };
+            }
+          }
+        });
+
+        if (best) return best;
+        var fallbackBbox = pathEl.getBBox();
+        return { cx: fallbackBbox.x + fallbackBbox.width / 2, cy: fallbackBbox.y + fallbackBbox.height / 2 };
+      }
+
+      fetch('https://cdn.jsdelivr.net/gh/flekschas/simple-world-map@master/world-map.svg')
+        .then(function (res) { return res.text(); })
+        .then(function (svgText) {
+          mapSvgHolder.innerHTML = svgText;
+          svg = mapSvgHolder.querySelector('svg');
+          if (!svg) throw new Error('SVG introuvable');
+
+          var vb = svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width
+            ? svg.viewBox.baseVal
+            : { x: 0, y: 0, width: svg.width.baseVal.value, height: svg.height.baseVal.value };
+
+          fullVB = { x: vb.x, y: vb.y, width: vb.width, height: vb.height };
+          view = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
+
+          // La carte remplit exactement la zone visible, sans marges ni lettreboxing,
+          // pour que le calcul pixel <-> coordonnées SVG reste précis.
+          board.style.aspectRatio = vb.width + ' / ' + vb.height;
+          svg.setAttribute('preserveAspectRatio', 'none');
+
+          Object.keys(data).forEach(function (country) {
+            var path = svg.getElementById(data[country].code);
+            var fbk = data[country].fallback;
+
+            if (path) {
+              path.classList.add('highlight');
+            }
+
+            if (path && !data[country].pinOverride) {
+              countryPoints[country] = getMainlandCenter(path, svg);
+            } else {
+              // Pas de tracé dédié (ex : Hong Kong), ou position forcée sur des coordonnées
+              // géographiques précises (ex : Espagne → Madrid) : conversion dans le repère du SVG
+              countryPoints[country] = {
+                cx: fullVB.x + ((fbk.lon + 180) / 360) * fullVB.width,
+                cy: fullVB.y + ((90 - fbk.lat) / 180) * fullVB.height
+              };
+            }
+          });
+
+          updateViewBox();
+        })
+        .catch(function () {
+          // En cas d'échec de chargement, on affiche les punaises avec une position approximative en %
+          Object.keys(data).forEach(function (country) {
+            var pin = pinLayer.querySelector('.pin[data-country="' + country + '"]');
+            var label = pinLayer.querySelector('.pin-label[data-country="' + country + '"]');
+            var fbk = data[country].fallback;
+            var leftPct = ((fbk.lon + 180) / 360) * 100;
+            var topPct = ((90 - fbk.lat) / 180) * 100;
+            pin.style.left = leftPct + '%';
+            pin.style.top = topPct + '%';
+            pin.classList.add('ready');
+            label.style.left = leftPct + '%';
+            label.style.top = topPct + '%';
+          });
+        });
+
+      // Affiche l'étiquette au survol/focus d'une punaise
+      pinLayer.querySelectorAll('.pin').forEach(function (pin) {
+        var country = pin.getAttribute('data-country');
+        var label = pinLayer.querySelector('.pin-label[data-country="' + country + '"]');
+        pin.addEventListener('mouseenter', function () { label.classList.add('shown'); });
+        pin.addEventListener('mouseleave', function () { if (!pin.classList.contains('active')) label.classList.remove('shown'); });
+        pin.addEventListener('focus', function () { label.classList.add('shown'); });
+        pin.addEventListener('blur', function () { if (!pin.classList.contains('active')) label.classList.remove('shown'); });
+      });
+
+      document.getElementById('zoomIn').addEventListener('click', function () { zoomByFactor(1.4); });
+      document.getElementById('zoomOut').addEventListener('click', function () { zoomByFactor(1 / 1.4); });
+      document.getElementById('zoomReset').addEventListener('click', function () {
+        view = { x: fullVB.x, y: fullVB.y, w: fullVB.width, h: fullVB.height };
+        updateViewBox();
+      });
+
+      board.addEventListener('wheel', function (e) {
+        if (!view) return;
+        e.preventDefault();
+        var rect = board.getBoundingClientRect();
+        var factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+        zoomAt(factor, e.clientX - rect.left, e.clientY - rect.top);
+      }, { passive: false });
+
+      // Glisser à la souris
+      var isDragging = false;
+      var dragMoved = false;
+      var lastX, lastY;
+
+      board.addEventListener('mousedown', function (e) {
+        if (!view) return;
+        isDragging = true;
+        dragMoved = false;
+        board.classList.add('dragging');
+        lastX = e.clientX; lastY = e.clientY;
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (!isDragging) return;
+        var dx = e.clientX - lastX;
+        var dy = e.clientY - lastY;
+        if (Math.abs(e.clientX - lastX) + Math.abs(e.clientY - lastY) > 2) dragMoved = true;
+        panBy(dx, dy);
+        lastX = e.clientX; lastY = e.clientY;
+      });
+      window.addEventListener('mouseup', function () {
+        isDragging = false;
+        board.classList.remove('dragging');
+      });
+
+      // Empêche le clic sur une punaise de s'activer juste après un glissement
+      board.addEventListener('click', function (e) {
+        if (dragMoved) {
+          e.stopPropagation();
+          dragMoved = false;
+        }
+      }, true);
+
+      // Glisser au doigt (un doigt) + pincer pour zoomer (deux doigts)
+      var touchStartDist = 0;
+      var touchLastX, touchLastY;
+
+      board.addEventListener('touchstart', function (e) {
+        if (!view) return;
+        if (e.touches.length === 1) {
+          isDragging = true;
+          dragMoved = false;
+          touchLastX = e.touches[0].clientX;
+          touchLastY = e.touches[0].clientY;
+        } else if (e.touches.length === 2) {
+          isDragging = false;
+          var dx = e.touches[0].clientX - e.touches[1].clientX;
+          var dy = e.touches[0].clientY - e.touches[1].clientY;
+          touchStartDist = Math.sqrt(dx * dx + dy * dy);
+        }
+      }, { passive: true });
+
+      board.addEventListener('touchmove', function (e) {
+        if (!view) return;
+        if (e.touches.length === 1 && isDragging) {
+          var dx = e.touches[0].clientX - touchLastX;
+          var dy = e.touches[0].clientY - touchLastY;
+          if (Math.abs(dx) + Math.abs(dy) > 2) dragMoved = true;
+          panBy(dx, dy);
+          touchLastX = e.touches[0].clientX;
+          touchLastY = e.touches[0].clientY;
+        } else if (e.touches.length === 2) {
+          var dx2 = e.touches[0].clientX - e.touches[1].clientX;
+          var dy2 = e.touches[0].clientY - e.touches[1].clientY;
+          var dist = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+          var rect = board.getBoundingClientRect();
+          var midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+          var midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+          zoomAt(dist / touchStartDist, midX, midY);
+          touchStartDist = dist;
+        }
+        e.preventDefault();
+      }, { passive: false });
+
+      board.addEventListener('touchend', function () {
+        isDragging = false;
+      });
+
+      window.addEventListener('resize', function () {
+        if (view) positionPinsAndLabels();
+      });
+    })();
+  </script>
+</body>
+</html>
