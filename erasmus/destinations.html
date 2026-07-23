@@ -334,7 +334,7 @@
         belgique: { code: "be", label: "Belgique", fallback: { lat: 50.85, lon: 4.35 }, companies: [
           { name: "Bruxelles Atelier", desc: "Collectif de designers indépendants, projets culturels et associatifs." }
         ]},
-        espagne: { code: "es", label: "Espagne", fallback: { lat: 40.42, lon: -3.7 }, companies: [
+        espagne: { code: "es", pinOverride: true, label: "Espagne", fallback: { lat: 40.4168, lon: -3.7038 }, companies: [
           { name: "Madrid Studio", desc: "Agence de design produit et mobilier contemporain." },
           { name: "Barcelona Creative", desc: "Studio pluridisciplinaire, design d'espace et scénographie." }
         ]},
@@ -567,10 +567,13 @@
 
             if (path) {
               path.classList.add('highlight');
+            }
+
+            if (path && !data[country].pinOverride) {
               countryPoints[country] = getMainlandCenter(path, svg);
             } else {
-              // Pas de tracé dédié (ex : Hong Kong) : coordonnées géographiques
-              // converties dans le repère du SVG
+              // Pas de tracé dédié (ex : Hong Kong), ou position forcée sur des coordonnées
+              // géographiques précises (ex : Espagne → Madrid) : conversion dans le repère du SVG
               countryPoints[country] = {
                 cx: fullVB.x + ((fbk.lon + 180) / 360) * fullVB.width,
                 cy: fullVB.y + ((90 - fbk.lat) / 180) * fullVB.height
